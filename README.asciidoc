@@ -1,0 +1,4 @@
+jttslite
+--------
+
+A complete rewrite of http://sourceforge.net/projects/jttslite/ using Griffon.
