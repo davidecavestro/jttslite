@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Auto generated on Tue Sep 25 09:09:32 CEST 2012 -->
+<classpath>
+    <!-- source paths -->
+    <classpathentry kind="src" path="griffon-app/models" />
+    <classpathentry kind="src" path="griffon-app/controllers" />
+    <classpathentry kind="src" path="griffon-app/views" />
+    <classpathentry kind="src" path="griffon-app/lifecycle" />
+    <classpathentry kind="src" path="griffon-app/conf" />
+    <classpathentry kind="src" path="griffon-app/resources" />
+    <classpathentry kind="src" path="griffon-app/i18n" />
+    <classpathentry kind="src" path="src/main" />
+    <classpathentry kind="src" path="test/unit" />
+    <classpathentry kind="src" path="test/integration" />
+    <!-- output paths -->
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" />
+    <classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT" />
+    <classpathentry kind="output" path="bin" />
+    <!-- runtime -->
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.8.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.griffon/griffon-rt/jars/griffon-rt-1.1.0.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/log4j/log4j/jars/log4j-1.2.17.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.slf4j/slf4j-log4j12/jars/slf4j-log4j12-1.7.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.slf4j/jcl-over-slf4j/jars/jcl-over-slf4j-1.7.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.slf4j/jul-to-slf4j/jars/jul-to-slf4j-1.7.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.griffon.plugins/griffon-swing-runtime/jars/griffon-swing-runtime-1.1.0.jar" />
+    <!-- test -->
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/junit/junit/jars/junit-4.10.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.1.jar" />
+    <!-- compile -->
+    <!-- build -->
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.apache.ant/ant/jars/ant-1.8.4.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.apache.ant/ant-launcher/jars/ant-launcher-1.8.4.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.apache.ant/ant-junit/jars/ant-junit-1.8.4.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.fusesource.jansi/jansi/jars/jansi-1.9.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/jline/jline/jars/jline-0.9.94.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/commons-io/commons-io/jars/commons-io-2.4.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/commons-lang/commons-lang/jars/commons-lang-2.6.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.6.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/commons-collections/commons-collections/jars/commons-collections-3.2.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.1.2.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.1.2.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/com.jcraft/jsch/jars/jsch-0.1.48.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/com.jcraft/jzlib/jars/jzlib-1.1.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.groovy.modules.http-builder/http-builder/jars/http-builder-0.5.2.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/xerces/xercesImpl/jars/xercesImpl-2.9.1.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/net.sf.ezmorph/ezmorph/jars/ezmorph-1.0.6.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.griffon/griffon-cli/jars/griffon-cli-1.1.0.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.griffon/griffon-scripts/jars/griffon-scripts-1.1.0.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.springframework/org.springframework.core/jars/org.springframework.core-3.1.2.RELEASE.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.springframework/org.springframework.beans/jars/org.springframework.beans-3.1.2.RELEASE.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.springframework/org.springframework.context/jars/org.springframework.context-3.1.2.RELEASE.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.springframework/org.springframework.context.support/jars/org.springframework.context.support-3.1.2.RELEASE.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/net.sf.json-lib/json-lib/jars/json-lib-2.4-jdk15.jar" />
+    <classpathentry kind="var" path="USER_HOME/.ivy2/cache/org.codehaus.griffon.plugins/griffon-swing-compile/jars/griffon-swing-compile-1.1.0.jar" />
+    <!-- platform specific -->
+</classpath>
