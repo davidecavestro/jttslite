@@ -78,15 +78,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="griffon-rt-1.1.0.jar">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon/griffon-rt/jars/griffon-rt-1.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="slf4j-api-1.7.1.jar">
         <CLASSES>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.1.jar!/" />
@@ -403,6 +394,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="jttslite-griffonPlugins" />
+    <orderEntry type="library" name="griffon-1.1.0" level="application" />
   </component>
 </module>
 
