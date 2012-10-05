@@ -21,4 +21,18 @@ class JttsliteController {
     def action = { evt = null ->
     }
     */
+    def startWorkLog = { evt = null ->
+        app.event('StartWorkLog')
+    }
+    def stopWorkLog = { evt = null ->
+        app.event('StopWorkLog')
+    }
+    def onStartWorkLog = { evt = null ->
+        model.loggingWork = true
+        println(model.loggingWork)
+    }
+    def onStopWorkLog = { evt = null ->
+        model.loggingWork = false
+        println(model.loggingWork)
+    }
 }
