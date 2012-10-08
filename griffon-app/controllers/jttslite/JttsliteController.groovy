@@ -21,18 +21,17 @@ class JttsliteController {
     def action = { evt = null ->
     }
     */
-    def startWorkLog = { evt = null ->
-        app.event('StartWorkLog')
+    def startProgress = { evt = null ->
+        app.event('StartProgress')
     }
-    def stopWorkLog = { evt = null ->
-        app.event('StopWorkLog')
+    def stopProgress = { evt = null ->
+        app.event('StopProgress')
     }
-    def onStartWorkLog = { evt = null ->
-        model.loggingWork = true
-        println(model.loggingWork)
+
+    def onStartProgress = { evt = null ->
+        model.inProgress = true
     }
-    def onStopWorkLog = { evt = null ->
-        model.loggingWork = false
-        println(model.loggingWork)
+    def onStopProgress = { evt = null ->
+        model.inProgress = false
     }
 }

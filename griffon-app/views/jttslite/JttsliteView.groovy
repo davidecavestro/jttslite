@@ -9,14 +9,14 @@ actions {
     action(
             id: "startWorkLogAction",
             name: "Start",
-            enabled: bind {!model.loggingWork},
-            closure: {controller.&startWorkLog}
+            enabled: bind {!model.inProgress},
+            closure: controller.&startProgress
     )
     action(
             id: "stopWorkLogAction",
             name: "Stop",
-            enabled: bind {model.loggingWork},
-            closure: {controller.&stopWorkLog}
+            enabled: bind {model.inProgress},
+            closure: controller.&stopProgress
     )
 }
 application(title: 'jttslite',
@@ -36,8 +36,8 @@ application(title: 'jttslite',
             }
         }
         toolBar {
-            button (startWorkLogAction)
-            button (stopWorkLogAction)
+            button (action: startWorkLogAction)
+            button (action: stopWorkLogAction)
         }
         splitPane {
             panel {
