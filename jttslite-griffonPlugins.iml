@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/eclipse-support-0.6.2" />
+    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-0.9" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/spring-1.1.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swing-1.1.0" />
     <orderEntry type="inheritedJdk" />
