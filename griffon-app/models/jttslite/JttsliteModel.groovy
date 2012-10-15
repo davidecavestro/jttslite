@@ -1,14 +1,10 @@
 package jttslite
 
-import ca.odell.glazedlists.EventList
-import ca.odell.glazedlists.BasicEventList
-import ca.odell.glazedlists.SortedList
-
 class JttsliteModel {
-
     @Bindable boolean inProgress
-    @Bindable Workspace workspace
+    @Bindable String status
 
-    EventList tasks = new SortedList( new BasicEventList(), {a, b -> a.name <=> b.name} as Comparator)
-
+    void mvcGroupInit(Map args) {
+        status = "Welcome to ${GriffonNameUtils.capitalize(app.getMessage('application.title'))}"
+    }
 }
