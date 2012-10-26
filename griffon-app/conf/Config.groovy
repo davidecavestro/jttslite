@@ -22,3 +22,5 @@ swing {
 
 
 i18n.basename = 'messages'
+
+griffon.services.basic.disabled = true
