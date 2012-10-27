@@ -9,6 +9,34 @@ application {
     //frameClass = 'javax.swing.JFrame'
 }
 mvcGroups {
+    // MVC Group for "preferences"
+    'preferences' {
+        model      = 'jttslite.PreferencesModel'
+        view       = 'jttslite.PreferencesView'
+        controller = 'jttslite.DialogController'
+    }
+
+    // MVC Group for "license"
+    'license' {
+        model      = 'jttslite.LicenseModel'
+        view       = 'jttslite.LicenseView'
+        controller = 'jttslite.DialogController'
+    }
+
+    // MVC Group for "credits"
+    'credits' {
+        model      = 'jttslite.CreditsModel'
+        view       = 'jttslite.CreditsView'
+        controller = 'jttslite.DialogController'
+    }
+
+    // MVC Group for "about"
+    'about' {
+        model      = 'jttslite.AboutModel'
+        view       = 'jttslite.AboutView'
+        controller = 'jttslite.DialogController'
+    }
+
     // MVC Group for "jttslite"
     'jttslite' {
         model      = 'jttslite.JttsliteModel'

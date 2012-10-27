@@ -13,3 +13,14 @@ log4j = {
            'griffon.app'
 }
 
+
+swing {
+    windowManager {
+        defaultHandler = new jttslite.JttsliteWindowDisplayHandler()
+    }
+}
+
+
+i18n.basename = 'messages'
+
+griffon.services.basic.disabled = true
