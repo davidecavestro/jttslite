@@ -163,8 +163,8 @@ griffon.project.dependency.resolution = {
 
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
+        mavenLocal()
+        mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
@@ -175,7 +175,8 @@ griffon.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime' or 'test' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
-        compile 'org.viewaframework:viewaframework-widget:latest.stable'
+        compile 'org.viewaframework:viewaframework-swing:1.0.7'
+        compile 'joda-time:joda-time:2.1'
     }
 }
 

@@ -97,4 +97,15 @@ class JttsliteController {
         model.inProgress = false
     }
 
+
+    def onStartupEnd = {app->
+        withSql {dataSourcename, sql->
+            def tmpList = []
+            sql.eachRow ('SELECT * FROM task') {
+                tmpList << [id: it.id, workspaceid: it.workspaceId, parentId: it.parentId, siblingIndex:it.siblingIndex, treeCode: it.treeCode, title: it.title, description: it.description]
+            }
+            edt{model.taskList.addAll (tmpList)}
+        }
+    }
+
 }

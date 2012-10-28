@@ -1,0 +1,31 @@
+DROP TABLE IF EXISTS workspace;
+CREATE TABLE workspace (
+	id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR (4000),
+	description VARCHAR (10000),
+);
+
+DROP TABLE IF EXISTS tasks;
+CREATE TABLE task (
+	id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	workspaceId INTEGER NOT NULL,
+	parentId INTEGER,
+	siblingIndex INTEGER NOT NULL,
+	treeCode VARCHAR(1000) NOT NULL,
+	title VARCHAR(4000) NOT NULL,
+	description VARCHAR(10000),
+	
+	CONSTRAINT fkTaskWorkspace FOREIGN KEY (workspaceId) REFERENCES workspace ON DELETE CASCADE
+
+);
+
+DROP TABLE IF EXISTS worklog;
+CREATE TABLE worklog (
+	id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	taskId INTEGER NOT NULL,
+	start LONG NOT NULL, // start time in millis from epoch
+	amount LONG, //duration in millis
+	
+	CONSTRAINT fkWorklogTask FOREIGN KEY (taskId) REFERENCES task ON DELETE CASCADE
+
+)
