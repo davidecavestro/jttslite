@@ -1,6 +1,10 @@
 package jttslite
 
 class JttsliteController {
+
+    def taskService
+    def workspaceService
+
     def newAction = {
     }
 
@@ -108,4 +112,7 @@ class JttsliteController {
         }
     }
 
+    def whenSpringReadyEnd = {app, applicationContext->
+        workspaceService.doInsert ("Default", "Default workspace")
+    }
 }

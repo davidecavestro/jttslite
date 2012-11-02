@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/charts-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/css-builder-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/datasource-0.4" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/docking-frame-0.5" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/fatcowicons-0.1" />
@@ -13,7 +14,7 @@
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/miglayout-0.4" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/oxbow-0.4" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/spring-1.1.1" />
-    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swing-1.1.0" />
+    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swing-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swingx-builder-0.7" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
