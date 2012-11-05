@@ -556,7 +556,11 @@
       <created>1352102876831</created>
       <updated>1352102876831</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="First steps with persistence">
+      <created>1352102892581</created>
+      <updated>1352102892581</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
