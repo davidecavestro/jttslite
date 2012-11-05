@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/views" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/services" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -16,12 +15,9 @@
     <orderEntry type="library" name="griffon-1.1.0" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (Jttslite)">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib" />
-        </CLASSES>
+        <CLASSES />
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="Jttslite-griffonPlugins" />

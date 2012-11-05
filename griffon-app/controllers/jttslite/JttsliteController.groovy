@@ -112,7 +112,7 @@ class JttsliteController {
         }
     }
 
-    def whenSpringReadyEnd = {app, applicationContext->
-        workspaceService.doInsert ("Default", "Default workspace")
-    }
+//    def whenSpringReadyEnd = {app, applicationContext->
+//        workspaceService.doInsert ("Default", "Default workspace")
+//    }
 }
