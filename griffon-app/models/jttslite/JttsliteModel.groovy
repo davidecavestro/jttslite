@@ -1,6 +1,6 @@
 package jttslite
 
-import org.viewaframework.widget.swing.table.*
+//import org.viewaframework.widget.swing.table.*
 import org.viewaframework.swing.table.*
 import ca.odell.glazedlists.BasicEventList
 import ca.odell.glazedlists.EventList

@@ -5,7 +5,7 @@ import javax.swing.JSplitPane
 import java.awt.BorderLayout
 import net.miginfocom.swing.MigLayout
 
-import org.viewaframework.widget.swing.table.*
+//import org.viewaframework.widget.swing.table.*
 import org.viewaframework.swing.*
 
 import java.awt.Color
@@ -46,7 +46,9 @@ splitPane {
             panel(title:'Search Criteria'){
                 borderLayout()
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
-                    jxtree( id: "tasks" )
+                    jxtree( id: "tasks" ) {
+                        eventTreeModel (source: model.tasks)
+                    }
                 }
             }
         }

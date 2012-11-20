@@ -6,16 +6,18 @@
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/controllers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/models" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/views" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/griffon-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/griffon-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="griffon-1.1.0" level="application" />
-    <orderEntry type="module-library" exported="">
-      <library name="Griffon:lib (Jttslite)">
+    <orderEntry type="library" name="griffon-1.1.0" level="project" />
+    <orderEntry type="module-library">
+      <library name="Griffon:lib">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
@@ -24,7 +26,8 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Jttslite-griffonPlugins" />
+    <orderEntry type="module" module-name="jttslite-griffonPluginFixes" />
+    <orderEntry type="module" module-name="jttslite-griffonPlugins" />
   </component>
 </module>
 
