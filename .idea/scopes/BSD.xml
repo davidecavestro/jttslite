@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="BSD" pattern="src:*..*||test:*..*" />
+</component>

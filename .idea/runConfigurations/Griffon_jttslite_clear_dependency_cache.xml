@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Griffon:jttslite clear-dependency-cache" type="GriffonRunConfigurationType" factoryName="Griffon">
+    <module name="jttslite" />
+    <setting name="vmparams" value="" />
+    <setting name="cmdLine" value="clear-dependency-cache" />
+    <setting name="depsClasspath" value="true" />
+    <setting name="passParentEnv" value="true" />
+    <method>
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>

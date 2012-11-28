@@ -24,3 +24,5 @@ swing {
 i18n.basename = 'messages'
 
 griffon.services.basic.disabled = true
+
+griffon.datasource.injectInto = ["controller", "service"]

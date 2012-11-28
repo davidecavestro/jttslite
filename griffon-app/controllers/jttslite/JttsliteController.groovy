@@ -103,12 +103,17 @@ class JttsliteController {
 
 
     def onStartupEnd = {app->
+        def wsId = workspaceService.doInsert ('prova1', 'prova uno')
+        def rootId = taskService.doInsert (wsId, null, 'prova1', 'prova uno')
+        taskService.doInsert (wsId, rootId, 'prova1.1', 'prova uno punto uno')
+        taskService.doInsert (wsId, rootId, 'prova1.2', 'prova uno punto due')
+
         withSql {dataSourcename, sql->
             def tmpList = []
             sql.eachRow ('SELECT * FROM task') {
                 tmpList << [id: it.id, workspaceid: it.workspaceId, parentId: it.parentId, siblingIndex:it.siblingIndex, treeCode: it.treeCode, title: it.title, description: it.description]
             }
-            edt{model.tasks.addAll (tmpList)}
+            edt{model.taskList.addAll (tmpList)}
         }
     }
 

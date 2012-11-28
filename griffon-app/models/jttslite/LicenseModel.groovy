@@ -1,5 +1,6 @@
 package jttslite
 
+import groovy.beans.Bindable
 class LicenseModel extends AbstractDialogModel {
     @Bindable String license
     

@@ -3,6 +3,8 @@ package jttslite
 import ca.odell.glazedlists.EventList
 import ca.odell.glazedlists.BasicEventList
 import ca.odell.glazedlists.SortedList
+import groovy.beans.Bindable
+import griffon.core.GriffonAddonDescriptor
 
 class AboutModel extends AbstractDialogModel {
     EventList plugins = new SortedList(new BasicEventList(),

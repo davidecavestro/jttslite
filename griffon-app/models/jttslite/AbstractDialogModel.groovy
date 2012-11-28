@@ -1,5 +1,6 @@
 package jttslite
 
+import groovy.beans.Bindable
 abstract class AbstractDialogModel {
     @Bindable String title
     @Bindable int width = 0

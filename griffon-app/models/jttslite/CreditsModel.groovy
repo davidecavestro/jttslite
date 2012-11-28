@@ -1,5 +1,6 @@
 package jttslite
 
+import groovy.beans.Bindable
 class CreditsModel extends AbstractDialogModel {
     @Bindable String credits
     

@@ -1,22 +1,18 @@
 package jttslite
 
-
-import javax.swing.JSplitPane
-import java.awt.BorderLayout
-import net.miginfocom.swing.MigLayout
-
 //import org.viewaframework.widget.swing.table.*
-import org.viewaframework.swing.*
 
-import java.awt.Color
-import java.awt.Font
-import org.jfree.chart.labels.PieToolTipGenerator
-import org.jfree.chart.ChartFactory
+
+import net.miginfocom.swing.MigLayout
 import org.jfree.chart.ChartPanel
-import org.jfree.data.general.DefaultPieDataset
-import groovy.swing.SwingBuilder
-import java.awt.*
-import javax.swing.WindowConstants as WC
+import org.viewaframework.swing.DynamicTable
+
+import java.awt.BorderLayout
+import javax.swing.JSplitPane
+import javax.swing.tree.DefaultTreeCellRenderer
+import ca.odell.glazedlists.TreeList
+import javax.swing.tree.TreeCellRenderer
+
 //panel {
 //    migLayout layoutConstraints: 'fill'
 //    splitPane {
@@ -46,9 +42,23 @@ splitPane {
             panel(title:'Search Criteria'){
                 borderLayout()
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
-                    jxtree( id: "tasks" ) {
-                        eventTreeModel (source: model.tasks)
+                    def delRenderer = new DefaultTreeCellRenderer()
+
+                    def taskTree = jxtree( id: "tasks" , editable: true, cellRenderer: [
+                            getTreeCellRendererComponent: {tree, value, selected, expanded, leaf, row, focus ->
+                                if (value instanceof TreeList.Node)
+                                    value = value.element.bean[value.element.property]
+                                delRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, focus)
+                            }] as TreeCellRenderer) {
+                        eventTreeModel (source: model.tasks) {
+                            afterEdit { path, node, value ->
+                                node.element.bean[node.element.property] = value
+                            }
+                        }
                     }
+
+//                    def delEditor = new MyEditor(taskTree, delRenderer)
+//                    taskTree.setCellEditor(delEditor)
                 }
             }
         }

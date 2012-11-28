@@ -63,4 +63,47 @@ class TaskService {
             )
         }
     }
+
+    def getTaskPath(def taskId) {
+        withSql { String dataSourceName, Sql sql ->
+            def result=[]
+            sql.eachRow("""
+            WITH link(id, title, parentId, siblingIndex, treeCode, description, workspaceId) AS (
+                SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId
+                FROM task
+                WHERE parentId IS NULL
+                UNION ALL
+                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeCode, task.description, task.workspaceId
+                FROM link INNER JOIN task ON link.id = task.parentId where task.id=?
+            ) SELECT id, title, parentId, siblingIndex, treeCode, description FROM link;
+                """,
+                [taskId], {
+                    result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
+                }
+            )
+            result
+        }
+    }
+
+    def getTaskPath1(def taskId) {
+        withSql { String dataSourceName, Sql sql ->
+            def result=[]
+            sql.eachRow("""
+            WITH link(id, title, parentId, siblingIndex, treeCode, description, workspaceId) AS (
+                SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId
+                FROM task
+                WHERE parentId IS NULL AND workspaceId=?
+                UNION ALL
+                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeCode, task.description, task.workspaceId
+                FROM link INNER JOIN task ON link.id = task.parentId
+            ) SELECT id, title, parentId, siblingIndex, treeCode, description FROM link WHERE workspaceId=?;
+                """,
+                    [taskId], {
+                        result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
+                    }
+            )
+            result
+        }
+    }
+
 }
