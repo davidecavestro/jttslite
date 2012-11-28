@@ -1,0 +1,14 @@
+JTTS lite is a desktop time tracking application. 
+It helps you to trace your daily tasks. It can also generate reports, import and export data.
+
+This project is a complete rewrite of the application using Griffon and an H2 relational database.
+
+The project home is hosted at http://sourceforge.net/projects/jttslite/.
+
+Credits
+-------
+Many thanks to:
+
+* The http://griffon.codehaus.org/[Griffon project]
+* The http://www.h2database.com/[H2 database project]
+
