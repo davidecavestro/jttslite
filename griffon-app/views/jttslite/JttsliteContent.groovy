@@ -44,10 +44,10 @@ splitPane {
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
                     def delRenderer = new DefaultTreeCellRenderer()
 
-                    def taskTree = jxtree( id: "tasks" , editable: true, cellRenderer: [
+                    def taskTree = jxtree( id: "tasks", rootVisible: false, editable: true, cellRenderer: [
                             getTreeCellRendererComponent: {tree, value, selected, expanded, leaf, row, focus ->
-                                if (value instanceof TreeList.Node)
-                                    value = value.element.bean[value.element.property]
+//                                if (value instanceof TreeList.Node)
+//                                    value = value.element.bean[value.element.property]
                                 delRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, focus)
                             }] as TreeCellRenderer) {
                         eventTreeModel (source: model.tasks) {

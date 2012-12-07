@@ -14,6 +14,8 @@ import ca.odell.glazedlists.EventList
 class JttsliteModel {
     @Bindable boolean inProgress
     @Bindable String status
+    @Bindable Long selectedTaskId
+    @Bindable Long inProgressWorklogId
 
     TaskService taskService
 
@@ -33,9 +35,6 @@ class JttsliteModel {
 
     void mvcGroupInit(Map args) {
         status = "Welcome to ${GriffonNameUtils.capitalize(app.getMessage('application.title'))}"
-        //FIXME
-        taskList.add ([id:1, title:'afafa', parentId:null, siblingIndex:1, treeCode:'1', description:'sdagasd g'])
-        taskList.add ([id:2, title:'aaaaaaaaaaaa', parentId:1, siblingIndex:1, treeCode:'1.1', description:'sdagasd g'])
     }
 
     private class TaskTreeFormat implements TreeList.Format {

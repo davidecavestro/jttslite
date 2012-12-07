@@ -94,6 +94,20 @@
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/docking-frame-0.5/dist/griffon-docking-frame-0.5-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/fatcowicons-0.1/dist/griffon-fatcowicons-0.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/datasource-0.4/dist/griffon-datasource-0.4-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/test" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/japex/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/jgoodiesforms/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/calculation/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/hibernate/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/nachocalendar/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/jfreechart/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/issuesbrowser/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/icu4j/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/treetable/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/swinglabs/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/ktable/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/swt/source" />
         </SOURCES>
       </library>
     </orderEntry>

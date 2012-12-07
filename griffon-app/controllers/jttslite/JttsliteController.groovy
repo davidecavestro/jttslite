@@ -2,8 +2,9 @@ package jttslite
 
 class JttsliteController {
 
-    def taskService
-    def workspaceService
+    WorkspaceService workspaceService
+    TaskService taskService
+    WorklogService worklogService
 
     def newAction = {
     }
@@ -96,17 +97,24 @@ class JttsliteController {
 
     def onStartProgress = { evt = null ->
         model.inProgress = true
+        model.inProgressWorklogId = worklogService.doStart(model.selectedTaskId)
     }
     def onStopProgress = { evt = null ->
         model.inProgress = false
+        worklogService.doStop(model.inProgressWorklogId)
+        model.inProgressWorklogId = null
     }
 
 
     def onStartupEnd = {app->
-        def wsId = workspaceService.doInsert ('prova1', 'prova uno')
-        def rootId = taskService.doInsert (wsId, null, 'prova1', 'prova uno')
-        taskService.doInsert (wsId, rootId, 'prova1.1', 'prova uno punto uno')
-        taskService.doInsert (wsId, rootId, 'prova1.2', 'prova uno punto due')
+        switch(Environment.current) {
+            case Environment.DEVELOPMENT:
+                configureForDevelopment()
+                break
+            case Environment.PRODUCTION:
+                configureForProduction()
+                break
+        }
 
         withSql {dataSourcename, sql->
             def tmpList = []
@@ -117,7 +125,24 @@ class JttsliteController {
         }
     }
 
-//    def whenSpringReadyEnd = {app, applicationContext->
-//        workspaceService.doInsert ("Default", "Default workspace")
-//    }
+    def whenSpringReadyEnd = {app, applicationContext->
+    }
+
+    def configureForProduction() {
+        if (!workspaceService.workspacesCount ()) {
+            def workspaceId = workspaceService.doInsert ("Default", "Default workspace")
+            def rootId = taskService.doInsert (workspaceId, null, 'Default workspace')
+        }
+    }
+
+    def configureForDevelopment() {
+        if (!workspaceService.workspacesCount ()) {
+            def workspaceId = workspaceService.doInsert ("Default", "Default workspace")
+
+            def rootId = taskService.doInsert (workspaceId, null, 'Task 1', 'Task 1 (Default worskpace)')
+            def task11Id = taskService.doInsert(workspaceId, rootId, 'Task 1.1')
+            def task12Id = taskService.doInsert(workspaceId, rootId, 'Task 1.2')
+            def task111Id = taskService.doInsert(workspaceId, task11Id, 'Task 1.1.1')
+        }
+    }
 }

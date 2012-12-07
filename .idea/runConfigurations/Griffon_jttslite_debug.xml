@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Griffon:jttslite debug" type="GriffonRunConfigurationType" factoryName="Griffon">
+    <module name="jttslite" />
+    <setting name="vmparams" value="" />
+    <setting name="cmdLine" value="run-app --debug --debug-suspend=y --non-interactive --debug-port=18290" />
+    <setting name="depsClasspath" value="true" />
+    <setting name="passParentEnv" value="true" />
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
+    <method>
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>

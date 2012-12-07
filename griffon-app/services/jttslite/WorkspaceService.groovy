@@ -50,4 +50,14 @@ class WorkspaceService {
             return result
         }
     }
+
+    boolean hasWorkspaces() {
+        return workspacesCount()>0
+    }
+
+    int workspacesCount() {
+        withSql { String dataSourceName, Sql sql ->
+            sql.firstRow('SELECT COUNT(*) AS wsnum FROM workspace').wsnum
+        }
+    }
 }
