@@ -7,7 +7,7 @@
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/datasource-0.4" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/docking-frame-0.5" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/fatcowicons-0.1" />
-    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-0.9" />
+    <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-1.1.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/gsql-1.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jbusycomponent-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jxlayer-1.0.0" />
@@ -19,7 +19,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="griffon-1.1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.1.0" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (jttslite-griffonPlugins)">
         <CLASSES>

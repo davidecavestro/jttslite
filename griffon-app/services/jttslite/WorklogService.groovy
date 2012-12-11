@@ -7,7 +7,7 @@ class WorklogService {
         def newId
         withSql { String dataSourceName, Sql sql ->
             def keys = sql.executeInsert('INSERT INTO worklog (taskId, start, amount, comment) VALUES (?,?,?,?)',
-                    [taskId, start?start:System.currentTimeMillis(), amount, comment]) != null
+                    [taskId, start?start:System.currentTimeMillis(), amount, comment])
             newId = keys[0][0]
         }
         return newId
@@ -19,7 +19,7 @@ class WorklogService {
         withSql { String dataSourceName, Sql sql ->
             def start = sql.firstRow('SELECT start FROM worklog WHERE id=?',[worklogId]).start
             def amount = System.currentTimeMillis()-start
-            sql.executeUpdate('UPDATE worklog SET (amount=?) WHERE id= ?',
+            sql.executeUpdate('UPDATE worklog SET amount=? WHERE id= ?',
                     [amount, worklogId])
         }
     }

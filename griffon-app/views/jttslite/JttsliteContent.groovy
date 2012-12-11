@@ -7,11 +7,14 @@ import net.miginfocom.swing.MigLayout
 import org.jfree.chart.ChartPanel
 import org.viewaframework.swing.DynamicTable
 
+import javax.swing.event.ListSelectionEvent
+import javax.swing.event.ListSelectionListener
 import java.awt.BorderLayout
 import javax.swing.JSplitPane
 import javax.swing.tree.DefaultTreeCellRenderer
-import ca.odell.glazedlists.TreeList
 import javax.swing.tree.TreeCellRenderer
+import javax.swing.ListSelectionModel
+import org.jdesktop.swingx.treetable.FileSystemModel
 
 //panel {
 //    migLayout layoutConstraints: 'fill'
@@ -42,20 +45,61 @@ splitPane {
             panel(title:'Search Criteria'){
                 borderLayout()
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
-                    def delRenderer = new DefaultTreeCellRenderer()
+//                    def delRenderer = new DefaultTreeCellRenderer()
 
-                    def taskTree = jxtree( id: "tasks", rootVisible: false, editable: true, cellRenderer: [
-                            getTreeCellRendererComponent: {tree, value, selected, expanded, leaf, row, focus ->
-//                                if (value instanceof TreeList.Node)
-//                                    value = value.element.bean[value.element.property]
-                                delRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, focus)
-                            }] as TreeCellRenderer) {
-                        eventTreeModel (source: model.tasks) {
-                            afterEdit { path, node, value ->
-                                node.element.bean[node.element.property] = value
-                            }
+//                    def taskTree = jxtree( id: "tasks", rootVisible: false, editable: true, cellRenderer: [
+//                            getTreeCellRendererComponent: {tree, value, selected, expanded, leaf, row, focus ->
+////                                if (value instanceof TreeList.Node)
+////                                    value = value.element.bean[value.element.property]
+//                                delRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, focus)
+//                            }] as TreeCellRenderer) {
+//                        eventTreeModel (source: model.tasks) {
+//                            afterEdit { path, node, value ->
+//                                node.element.bean[node.element.property] = value
+//                            }
+//                        }
+//                    }
+
+
+                    selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskList)
+                    selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
+
+                    scrollPane {
+                        table(id:'taskTree', selectionModel:selectionModel) {
+                            tableFormat = defaultAdvancedTableFormat(columns: [
+                                    [name: 'title',     title: 'Name'],
+                                    [name: 'treeCode',     title: 'Tree code'],
+                                    [name: 'description', title: 'Description']])
+                            eventTableModel(source:model.taskList, format:tableFormat)
+                            installTreeTableSupport(source:model.taskTreeList, index:0i)
+
+
+                            current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
+                                if ( !evt.isAdjusting) {
+
+                                    def task = model.taskList[evt.source.leadSelectionIndex]
+                                    model.selectedTaskId = task.id
+                                    //... do stuff with the selected index ...
+                                }
+                            }] as ListSelectionListener)
                         }
                     }
+
+////                    scrollPane {
+//                        treeTable(
+//                            treeTableModel: new FileSystemModel(),
+//                            showHorizontalLines: true,
+//                            showVerticalLines: true
+//                        )
+////                    }
+
+//                            id:'tasks', selectionModel:selectionModel) {
+//                        tableFormat = defaultTableFormat(columnNames:["Name"])
+//                        eventTableModel(source:model.tasks, format:tableFormat)
+//                        installTreeTableSupport(source:model.tasks)
+//                    }
+
+
 
 //                    def delEditor = new MyEditor(taskTree, delRenderer)
 //                    taskTree.setCellEditor(delEditor)

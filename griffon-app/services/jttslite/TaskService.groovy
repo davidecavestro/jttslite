@@ -139,13 +139,13 @@ class TaskService {
             WITH link(id, title, parentId, siblingIndex, treeCode, description, workspaceId) AS (
                 SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId
                 FROM task
-                WHERE parentId IS NULL
+                WHERE task.id=${taskId}
                 UNION ALL
                 SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeCode, task.description, task.workspaceId
-                FROM link INNER JOIN task ON link.id = task.parentId where task.id=?
-            ) SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId FROM link;
+                FROM link INNER JOIN task ON link.parentid = task.id
+            ) SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId FROM link ORDER BY treeCode ASC;
                 """,
-                [taskId], {
+                [/*taskId*/], {
                     result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
                 }
             )

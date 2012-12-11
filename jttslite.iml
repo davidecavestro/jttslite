@@ -10,6 +10,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/griffon-app/conf" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/griffon-app/lifecycle" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
@@ -28,7 +30,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="jttslite-griffonPluginFixes" />
     <orderEntry type="module" module-name="jttslite-griffonPlugins" />
-    <orderEntry type="library" name="griffon-1.1.0" level="application" />
   </component>
 </module>
 

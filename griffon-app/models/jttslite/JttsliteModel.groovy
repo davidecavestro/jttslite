@@ -20,8 +20,8 @@ class JttsliteModel {
     TaskService taskService
 
     BasicEventList taskList = new BasicEventList ()
-    TreeList tasks = new TreeList(new SortedList (taskList, {a,b-> a.key <=> b.key} as Comparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
-    EventList worklogs = new SortedList (new BasicEventList (), {a,b-> a.key <=> b.key} as Comparator)
+    TreeList taskTreeList = new TreeList(new SortedList (taskList, {a,b-> a.key <=> b.key} as Comparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
+    EventList worklogList = new SortedList (new BasicEventList (), {a,b-> a.key <=> b.key} as Comparator)
 
     /* Table result model using viewaframework.org DynamicTableModel */
     @Newify([DynamicTableColumn])
@@ -39,7 +39,10 @@ class JttsliteModel {
 
     private class TaskTreeFormat implements TreeList.Format {
         public void getPath(List path, Object element) {
-            path.addAll (taskService.getTaskPath (element.id))
+            def taskPath = taskService.getTaskPath (element.id)
+//            taskPath.pop ()
+//            taskPath.add (element)
+            path.addAll (taskPath)
         }
 
         public boolean allowsChildren(Object element) {
@@ -48,15 +51,16 @@ class JttsliteModel {
 
         @Override
         public Comparator getComparator(int arg0) {
-            @SuppressWarnings("unchecked")
-            final Comparator comparator = GlazedLists.chainComparators(
-//                    GlazedLists.beanPropertyComparator(Location.class, "continent"),
-//                    GlazedLists.beanPropertyComparator(Location.class, "country"),
-//                    GlazedLists.beanPropertyComparator(Location.class, "province"),
-//                    GlazedLists.beanPropertyComparator(Location.class, "city")
-            );
-
-            return comparator;
+            return null
+//            @SuppressWarnings("unchecked")
+//            final Comparator comparator = GlazedLists.chainComparators(
+////                    GlazedLists.beanPropertyComparator(Location.class, "continent"),
+////                    GlazedLists.beanPropertyComparator(Location.class, "country"),
+////                    GlazedLists.beanPropertyComparator(Location.class, "province"),
+////                    GlazedLists.beanPropertyComparator(Location.class, "city")
+//            );
+//
+//            return comparator;
         }
     }
 }

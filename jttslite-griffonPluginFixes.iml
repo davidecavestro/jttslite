@@ -19,8 +19,6 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/com.ezware.oxbow/task-dialog/jars/task-dialog-1.3.5.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-oxbow-runtime/jars/griffon-oxbow-runtime-0.4.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-gsql-runtime/jars/griffon-gsql-runtime-1.0.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/net.java.dev.glazedlists/glazedlists_java15/jars/glazedlists_java15-1.8.0.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-glazedlists-runtime/jars/griffon-glazedlists-runtime-0.9.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.miglayout/miglayout-swing/jars/miglayout-swing-4.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.miglayout/miglayout-core/jars/miglayout-core-4.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-miglayout-runtime/jars/griffon-miglayout-runtime-0.4.jar!/" />
@@ -58,6 +56,8 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/jfree/jfreechart/jars/jfreechart-1.0.13.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/jfree/jcommon/jars/jcommon-1.0.16.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-charts-runtime/jars/griffon-charts-runtime-1.0.0.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/net.java.dev.glazedlists/glazedlists_java15/jars/glazedlists_java15-1.8.0.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-glazedlists-runtime/jars/griffon-glazedlists-runtime-1.1.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.dockingframes/docking-frames-core/jars/docking-frames-core-1.1.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.dockingframes/docking-frames-common/jars/docking-frames-common-1.1.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.codehaus.griffon.plugins/griffon-docking-frame-runtime/jars/griffon-docking-frame-runtime-0.5.jar!/" />
@@ -71,12 +71,12 @@
         <JAVADOC>
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/oxbow-0.4/dist/griffon-oxbow-0.4-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/gsql-1.0/dist/griffon-gsql-1.0-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-0.9/dist/griffon-glazedlists-0.9-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jxlayer-1.0.0/dist/griffon-jxlayer-1.0.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jbusycomponent-1.0.0/dist/griffon-jbusycomponent-1.0.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/spring-1.1.1/dist/griffon-spring-1.1.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swing-1.1.0/dist/griffon-swing-1.1.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/charts-1.0.0/dist/griffon-charts-1.0.0-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-1.1.0/dist/griffon-glazedlists-1.1.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/docking-frame-0.5/dist/griffon-docking-frame-0.5-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/fatcowicons-0.1/dist/griffon-fatcowicons-0.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/datasource-0.4/dist/griffon-datasource-0.4-javadoc.jar!/" />
@@ -84,13 +84,13 @@
         <SOURCES>
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/oxbow-0.4/dist/griffon-oxbow-0.4-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/gsql-1.0/dist/griffon-gsql-1.0-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-0.9/dist/griffon-glazedlists-0.9-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/miglayout-0.4/dist/griffon-miglayout-0.4-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jxlayer-1.0.0/dist/griffon-jxlayer-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/jbusycomponent-1.0.0/dist/griffon-jbusycomponent-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/spring-1.1.1/dist/griffon-spring-1.1.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/swing-1.1.0/dist/griffon-swing-1.1.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/charts-1.0.0/dist/griffon-charts-1.0.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/glazedlists-1.1.0/dist/griffon-glazedlists-1.1.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/docking-frame-0.5/dist/griffon-docking-frame-0.5-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/fatcowicons-0.1/dist/griffon-fatcowicons-0.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.1.0/projects/jttslite/plugins/datasource-0.4/dist/griffon-datasource-0.4-sources.jar!/" />
