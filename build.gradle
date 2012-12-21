@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenRepo name: 'Codehaus',       url: 'http://repository.codehaus.org'
+        mavenRepo name: 'SpringSource',   url: 'http://repository.springsource.com/maven/bundles/release'
+        mavenRepo name: 'Sonaytpe',       url: 'http://repository.sonatype.org/content/groups/public'
+        mavenRepo name: 'Grails Central', url: 'http://repo.grails.org/grails/core/'
+        mavenRepo name: 'JavaNet',        url: 'http://download.java.net/maven/2/'
+	flatDir dirs: 'gradle-lib'
+	//mavenLocal()
+    }
+
+    dependencies {
+        classpath('org.codehaus.griffon:gradle-griffon-plugin:latest.integration')
+        classpath('org.codehaus.griffon:griffon-launcher:latest.integration')//added to obviate missing of gradle-griffon-plugin-1.1.0-SNAPSHOT.pom
+        classpath('org.spockframework:spock-core:0.7-groovy-1.8')//added to obviate missing of griffon-launcher-1.1.0-SNAPSHOT.pom and adapteed for groovy 1.8.x
+        classpath('org.apache.ant:ant:1.8.2')//added to obviate missing of griffon-launcher-ant-1.1.0-SNAPSHOT.pom
+        classpath('org.codehaus.griffon:griffon-scripts:1.1.0')
+    }
+}
+
+griffonVersion = '1.1.0'
+version = '0.1'
+
+apply plugin: 'griffon'
+
+repositories {
+    mavenCentral()
+    mavenRepo name: 'Codehaus', url: 'http://repository.codehaus.org/'
+}
+
+dependencies {
+    compile "org.codehaus.griffon:griffon-rt:$griffonVersion"
+}

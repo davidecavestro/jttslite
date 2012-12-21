@@ -4,6 +4,8 @@ package jttslite
 
 
 import ca.odell.glazedlists.BasicEventList
+import ca.odell.glazedlists.DisposableMap
+import ca.odell.glazedlists.FunctionList
 import ca.odell.glazedlists.SortedList
 import ca.odell.glazedlists.TreeList
 import org.viewaframework.swing.table.DynamicTableColumn
@@ -20,6 +22,7 @@ class JttsliteModel {
     TaskService taskService
 
     BasicEventList taskList = new BasicEventList ()
+    DisposableMap taskMap = GlazedLists.syncEventListToMap(taskList, new TaskKeyMaker ())
     TreeList taskTreeList = new TreeList(new SortedList (taskList, {a,b-> a.key <=> b.key} as Comparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
     EventList worklogList = new SortedList (new BasicEventList (), {a,b-> a.key <=> b.key} as Comparator)
 
@@ -40,9 +43,12 @@ class JttsliteModel {
     private class TaskTreeFormat implements TreeList.Format {
         public void getPath(List path, Object element) {
             def taskPath = taskService.getTaskPath (element.id)
-//            taskPath.pop ()
-//            taskPath.add (element)
-            path.addAll (taskPath)
+
+            def elems = taskPath.collect {elem->
+                def origElem = taskMap.get(elem.id)
+                return origElem
+            }
+            path.addAll (elems)
         }
 
         public boolean allowsChildren(Object element) {
@@ -61,6 +67,14 @@ class JttsliteModel {
 //            );
 //
 //            return comparator;
+        }
+    }
+
+
+    class TaskKeyMaker implements FunctionList.Function<Map, Object> {
+
+        Object evaluate(Map sourceValue) {
+            return sourceValue.id
         }
     }
 }
