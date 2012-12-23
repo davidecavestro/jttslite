@@ -17,7 +17,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="griffon-1.1.0" level="project" />
     <orderEntry type="module-library">
       <library name="Griffon:lib">
         <CLASSES>
@@ -29,6 +28,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="jttslite-griffonPluginFixes" />
+    <orderEntry type="library" name="griffon-1.2.0-SNAPSHOT" level="application" />
     <orderEntry type="module" module-name="jttslite-griffonPlugins" />
   </component>
 </module>
