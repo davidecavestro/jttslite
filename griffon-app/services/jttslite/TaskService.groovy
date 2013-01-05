@@ -58,24 +58,29 @@ class TaskService {
         def newId
         withSql { String dataSourceName, Sql sql ->
             def siblingIndex
+            def treeDepth
             def treeCode
             def parent
             if (parentId!=null) {
                 siblingIndex = sql.firstRow('SELECT MAX(siblingIndex) AS siblingIndex FROM task WHERE parentId=?', [parentId]).siblingIndex
                 parent = getTask (parentId)
+                treeDepth = parent.treeDepth+1
+            } else {
+                treeDepth = 0
             }
             if (siblingIndex!=null) {
                 siblingIndex++
             } else {
-                siblingIndex = 1
+                siblingIndex = 0
             }
             if (parent!=null) {
-                treeCode = "${parent.treeCode}.${siblingIndex}".toString()
+                treeCode = "${parent.treeCode}.${siblingIndex+1}".toString()
             } else {
-                treeCode = "${siblingIndex}".toString ()
+                treeCode = "${siblingIndex+1}".toString ()
             }
-            def keys = sql.executeInsert('INSERT INTO task (workspaceId, parentId, title, description, siblingIndex, treeCode) VALUES (?,?,?,?,?,?)',
-                    [workspaceId, parentId, title, description, siblingIndex, treeCode])
+
+            def keys = sql.executeInsert('INSERT INTO task (workspaceId, parentId, title, description, siblingIndex, treeDepth, treeCode) VALUES (?,?,?,?,?,?,?)',
+                    [workspaceId, parentId, title, description, siblingIndex, treeDepth, treeCode])
             newId = keys[0][0]
         }
         return newId
@@ -100,8 +105,8 @@ class TaskService {
                     [newParent.treeCode, parentId, siblingIndex]) != null
         }
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('UPDATE task SET parentId=?, siblingIndex=?, treeCode=?+'.'+? WHERE id=?',
-                    [newParent.id, siblingIndex, newParent.treeCode, siblingIndex, id]) != null
+            sql.executeUpdate('UPDATE task SET parentId=?, siblingIndex=?, treeDepth=?, treeCode=?+'.'+? WHERE id=?',
+                    [newParent.id, siblingIndex, newParent.treeDepth+1, newParent.treeCode, siblingIndex, id]) != null
         }
         //shift left old siblings
         withSql { String dataSourceName, Sql sql ->
@@ -126,9 +131,10 @@ class TaskService {
             def result=[]
             sql.eachRow('SELECT * FROM task WHERE workspaceId=?',
                     [workspaceId], {
-                        result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
+                        result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeDepth: it.treeDepth, treeCode:it.treeCode, title:it.title, description:it.description]
                     }
             )
+            return result
         }
     }
 
@@ -136,42 +142,20 @@ class TaskService {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
             sql.eachRow("""
-            WITH link(id, title, parentId, siblingIndex, treeCode, description, workspaceId) AS (
-                SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId
+            WITH link(id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId) AS (
+                SELECT id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId
                 FROM task
                 WHERE task.id=${taskId}
                 UNION ALL
-                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeCode, task.description, task.workspaceId
+                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeDepth, task.treeCode, task.description, task.workspaceId
                 FROM link INNER JOIN task ON link.parentid = task.id
-            ) SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId FROM link ORDER BY treeCode ASC;
+            ) SELECT id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId FROM link ORDER BY treeCode ASC;
                 """,
                 [/*taskId*/], {
-                    result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
+                    result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeDepth:it.treeDepth,  treeCode:it.treeCode, title:it.title, description:it.description]
                 }
             )
             result
         }
     }
-
-    def getTaskPath1(def taskId) {
-        withSql { String dataSourceName, Sql sql ->
-            def result=[]
-            sql.eachRow("""
-            WITH link(id, title, parentId, siblingIndex, treeCode, description, workspaceId) AS (
-                SELECT id, title, parentId, siblingIndex, treeCode, description, workspaceId
-                FROM task
-                WHERE parentId IS NULL AND workspaceId=?
-                UNION ALL
-                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeCode, task.description, task.workspaceId
-                FROM link INNER JOIN task ON link.id = task.parentId
-            ) SELECT id, title, parentId, siblingIndex, treeCode, description FROM link WHERE workspaceId=?;
-                """,
-                    [taskId], {
-                        result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeCode:it.treeCode, title:it.title, description:it.description]
-                    }
-            )
-            result
-        }
-    }
-
 }

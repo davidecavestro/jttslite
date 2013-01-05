@@ -45,9 +45,9 @@ import java.awt.Component
 /* -------------------- LAYOUT ---------------------- */
 /* -------------------------------------------------- */
 splitPane {
-    splitPane(id:'searchManagerPanel',orientation:JSplitPane.VERTICAL_SPLIT){
+    splitPane(id:'mainPanel',orientation:JSplitPane.VERTICAL_SPLIT){
         dockingFrame(preferredSize: new java.awt.Dimension(300,300)) {
-            panel(title:'Search Criteria'){
+            panel(title:'Tasks'){
                 borderLayout()
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
 //                    def delRenderer = new DefaultTreeCellRenderer()
@@ -81,21 +81,29 @@ splitPane {
                                     [name: 'title',     title: 'Name'],
                                     [name: 'treeCode',     title: 'Tree code'],
                                     [name: 'description', title: 'Description']])
-                            eventTableModel(source:model.taskList, format:tableFormat)
+                            eventTableModel(source:model.taskTreeList, format:tableFormat)
                             TreeTableSupport treeTableSupport = installTreeTableSupport(source:model.taskTreeList, index:0i)
 
                             treeTableSupport.arrowKeyExpansionEnabled = true
                             treeTableSupport.showExpanderForEmptyParent = true
-                            /*
+
                             current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                                 if ( !evt.isAdjusting) {
 
-                                    def task = model.taskList[evt.source.leadSelectionIndex]
-                                    model.selectedTaskId = task.id
-                                    //... do stuff with the selected index ...
+                                    def selectionIndex = evt.source.leadSelectionIndex
+
+                                    if (selectionIndex!=null && selectionIndex>=0) {
+                                        def task = model.taskList[selectionIndex]
+                                        //controller.selectedTaskChanged (task.id)
+                                        model.selectedTaskId = task.id
+                                        //... do stuff with the selected index ...
+                                    } else {
+                                        model.selectedTaskId = null
+                                        //controller.selectedTaskChanged (null)
+                                    }
                                 }
                             }] as ListSelectionListener)
-                            */
+
                         }
                     }
 
@@ -121,18 +129,50 @@ splitPane {
             }
         }
         dockingFrame{
-            panel(id:'chartPanel',name:'chartPanel',title:'Search Statistics'){
+            panel(id:'chartPanel',name:'chartPanel',title:'Charts'){
                 widget(new ChartPanel(chart))
             }
         }
     }
     dockingFrame{
-        panel(title:'Search Results'){
+        panel(title:'Worklogs'){
             borderLayout()
             busyComponent(id: "c1", constraints: CENTER/*, busy: bind(source:model,sourceProperty:'searchResultsPanelEnabled')*/) {
                 busyModel(description: "Please Wait...")
-                scrollPane(name:'peopleTableWrapper',constraints:BorderLayout.CENTER) {
-                    widget(new DynamicTable(model.tableModel))
+                scrollPane(name:'worklogTableWrapper',constraints:BorderLayout.CENTER) {
+
+                    def selectionModel
+                    //widget(new DynamicTable(model.tableModel))
+                    noparent {
+                        selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.swingProxyWorklogList)
+                        selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
+                    }
+                    def worklogTable = new JTable() {
+                        Component prepareRenderer() {
+                            super.prepareRenderer ()
+                        }
+                    }
+                    table(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
+                        tableFormat = defaultAdvancedTableFormat(columns: [
+                                [name: 'start',     title: 'Start'],
+                                [name: 'amount',     title: 'Duration'],
+                                [name: 'comment', title: 'Comment']])
+                        eventTableModel(source:model.swingProxyWorklogList, format:tableFormat)
+
+                        current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
+                            if ( !evt.isAdjusting) {
+
+                                def selectionIndex = evt.source.leadSelectionIndex
+
+                                if (selectionIndex!=null && selectionIndex>=0) {
+                                    //... do stuff with the selected index ...
+                                } else {
+                                }
+                            }
+                        }] as ListSelectionListener)
+
+                    }
+
                 }
             }
         }

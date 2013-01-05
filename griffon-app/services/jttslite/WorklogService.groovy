@@ -7,7 +7,7 @@ class WorklogService {
         def newId
         withSql { String dataSourceName, Sql sql ->
             def keys = sql.executeInsert('INSERT INTO worklog (taskId, start, amount, comment) VALUES (?,?,?,?)',
-                    [taskId, start?start:System.currentTimeMillis(), amount, comment])
+                    [taskId, start?start:new Date (), amount, comment])
             newId = keys[0][0]
         }
         return newId
@@ -18,7 +18,7 @@ class WorklogService {
     def doStop(def worklogId) {
         withSql { String dataSourceName, Sql sql ->
             def start = sql.firstRow('SELECT start FROM worklog WHERE id=?',[worklogId]).start
-            def amount = System.currentTimeMillis()-start
+            def amount = System.currentTimeMillis()-start.time
             sql.executeUpdate('UPDATE worklog SET amount=? WHERE id= ?',
                     [amount, worklogId])
         }
@@ -33,6 +33,13 @@ class WorklogService {
             def result=[]
             sql.eachRow('SELECT * FROM worklog WHERE taskId=?',
                     [taskId], {result<<[id:it.id, taskId:it.taskId, start:it.start, amount:it.amount, comment:it.comment]})
+            return result
+        }
+    }
+
+    def getRunningWorklog(def workspaceId) {
+        withSql { String dataSourceName, Sql sql ->
+            sql.firstRow('SELECT worklog.id AS id, worklog.taskId AS taskId, worklog.start AS start, worklog.amount AS amount, worklog.comment AS comment FROM worklog, task WHERE worklog.amount IS NULL AND worklog.taskId=task.id AND task.workspaceId=?',[workspaceId])
         }
     }
 }

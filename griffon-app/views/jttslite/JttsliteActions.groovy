@@ -18,13 +18,13 @@ actions {
     action(
             id: "startWorkLogAction",
             name: "Start",
-            enabled: bind {!model.inProgress},
+            enabled: bind {model.startEnabled},
             closure: controller.&startProgress
     )
     action(
             id: "stopWorkLogAction",
             name: "Stop",
-            enabled: bind {model.inProgress},
+            enabled: bind {model.stopEnabled},
             closure: controller.&stopProgress
     )
 }

@@ -14,7 +14,7 @@ dataSource {
 environments {
     development {
         dataSource {
-            dbCreate = 'create' // one of ['create', 'skip']
+            dbCreate = 'skip' // one of ['create', 'skip']
             url = 'jdbc:h2:file:jttslite-dev'
         }
     }

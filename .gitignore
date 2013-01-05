@@ -2,3 +2,4 @@
 /staging
 /out
 .gradle
+target

@@ -1,7 +1,5 @@
-The source of this text comes from
+Many thanks to:
 
-   griffon-app/resources/credits.txt
-
-
-
-
+* The Griffon project, http://griffon.codehaus.org/
+* The H2 database project, http://www.h2database.com/
+* The Gradle project, http://www.gradle.org/

@@ -95,17 +95,20 @@ class JttsliteController {
     }
 
     def onStartProgress = { evt = null ->
-        model.inProgress = true
         model.inProgressWorklogId = worklogService.doStart(model.selectedTaskId)
+
+        model.worklogList.add (worklogService.getWorklog(model.inProgressWorklogId) as ObservableMap)
     }
     def onStopProgress = { evt = null ->
-        model.inProgress = false
         worklogService.doStop(model.inProgressWorklogId)
+        model.worklogMap[model.inProgressWorklogId] = worklogService.getWorklog(model.inProgressWorklogId) as ObservableMap
         model.inProgressWorklogId = null
     }
 
-
     def onStartupEnd = {app->
+        /*
+        eventually loads initial/default data
+         */
         switch(Environment.current) {
             case Environment.DEVELOPMENT:
                 configureForDevelopment()
@@ -117,23 +120,20 @@ class JttsliteController {
         loadData ()
     }
 
-    def whenSpringReadyEnd = {app, applicationContext->
+    def onShutdownRequested = {app->
+        model.saveLastWorkspace()
     }
+
+/*
+def whenSpringReadyEnd = {app, applicationContext->
+}*/
 
     def loadData = { evt = null ->
         app.event('DataLoad')
     }
 
     def onDataLoad = { evt = null ->
-        withSql {dataSourcename, sql->
-            def tmpList = []
-            sql.eachRow ('SELECT * FROM task') {
-                tmpList << [id: it.id, workspaceid: it.workspaceId, parentId: it.parentId, siblingIndex:it.siblingIndex, treeCode: it.treeCode, title: it.title, description: it.description]
-            }
-            edt{
-                model.taskList.addAll (tmpList)
-            }
-        }
+        model.loadLastWorkspace ()
     }
 
     def configureForProduction() {

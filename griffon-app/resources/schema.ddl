@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS dictionary;
+CREATE TABLE dictionary (
+	key VARCHAR (1000) NOT NULL PRIMARY KEY,
+	stringValue VARCHAR (10000),
+	longValue LONG,
+	booleanValue BOOLEAN
+);
+
 DROP TABLE IF EXISTS workspace;
 CREATE TABLE workspace (
 	id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -12,6 +20,7 @@ CREATE TABLE task (
 	parentId LONG,
 	siblingIndex INTEGER NOT NULL,
 	treeCode VARCHAR(1000) NOT NULL,
+	treeDepth LONG NOT NULL,
 	title VARCHAR(4000) NOT NULL,
 	description VARCHAR(10000),
 	
@@ -23,7 +32,7 @@ DROP TABLE IF EXISTS worklog;
 CREATE TABLE worklog (
 	id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	taskId LONG NOT NULL,
-	start LONG NOT NULL, // start time in millis from epoch
+	start DATETIME NOT NULL, // start time in millis from epoch
 	amount LONG, //duration in millis
 	comment VARCHAR(10000),
 	

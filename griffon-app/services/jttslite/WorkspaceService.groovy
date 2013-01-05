@@ -31,13 +31,7 @@ class WorkspaceService {
     }
     def getWorkspace(def id) {
         withSql { String dataSourceName, Sql sql ->
-            def result=[]
-            sql.eachRow('SELECT * FROM workspace WHERE id=?',
-                    [id], {
-                        result<<[id:it.id, name:it.name, description:it.description]
-                    }
-            )
-            return result?result[0]:null
+            sql.firstRow('SELECT * FROM workspace WHERE id=?', [id])
         }
     }
     def getWorkspaces() {
