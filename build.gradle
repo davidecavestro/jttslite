@@ -61,6 +61,7 @@ dependencies {
             ":commons-io:2.4",
             ":commons-collections:3.2.1"
             ":junit:4.10"
+            ":ezmorph:1.0.6"
     }
     bootstrap ":bndlib:1.50.0"
     test ":junit:4.10"
