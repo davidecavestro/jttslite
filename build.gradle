@@ -27,6 +27,8 @@ version = '0.1'
 apply plugin: 'groovy'
 apply plugin: 'griffon'
 
+defaultTasks 'clean', 'test'
+
 repositories {
     mavenCentral()
     mavenRepo name: 'Codehaus', url: 'http://repository.codehaus.org/'
@@ -60,4 +62,9 @@ dependencies {
             ":commons-collections:3.2.1"
             ":junit:4.10"
     }
+    bootstrap ":bndlib:1.50.0"
+    test ":junit:4.10"
+    test ":ant-junit:1.8.4"
+    test ":bndlib:1.50.0"
+
 }
