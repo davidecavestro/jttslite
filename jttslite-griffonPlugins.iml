@@ -18,8 +18,6 @@
     <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/swingx-builder-0.7" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0-SNAPSHOT" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (jttslite-griffonPlugins)">

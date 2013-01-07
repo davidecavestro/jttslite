@@ -4,7 +4,6 @@
     <exclude-output />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0-SNAPSHOT" level="project" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib-fixes (jttslite-griffonPluginFixes)">
         <CLASSES>
