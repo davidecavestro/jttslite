@@ -68,7 +68,13 @@ class JttsliteModel {
 
     public void setInProgressWorklogId (Long worklogId) {
         inProgressWorklogId = worklogId
-        inProgress = inProgressWorklogId!=null
+        def running = inProgressWorklogId!=null
+        inProgress = running
+        if (running) {
+            status = app.getMessage('application.title')
+        } else {
+
+        }
     }
 
     /*
