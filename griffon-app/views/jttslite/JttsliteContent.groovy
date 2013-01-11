@@ -1,25 +1,14 @@
 package jttslite
 
 import ca.odell.glazedlists.swing.TreeTableSupport
-
-//import org.viewaframework.widget.swing.table.*
-
-
 import net.miginfocom.swing.MigLayout
-import org.jfree.chart.ChartPanel
-import org.viewaframework.swing.DynamicTable
 
-import javax.swing.JTable
+import org.jfree.chart.ChartPanel
+
+import javax.swing.*
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
-import java.awt.BorderLayout
-import javax.swing.JSplitPane
-import javax.swing.tree.DefaultTreeCellRenderer
-import javax.swing.tree.TreeCellRenderer
-import javax.swing.ListSelectionModel
-import org.jdesktop.swingx.treetable.FileSystemModel
-
-import java.awt.Component
+import java.awt.*
 
 //panel {
 //    migLayout layoutConstraints: 'fill'

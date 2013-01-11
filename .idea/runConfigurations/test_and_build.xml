@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test and build" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+    <module name="jttslite" />
+    <setting name="path" value="$PROJECT_DIR$/build.gradle" />
+    <setting name="vmparams" value="" />
+    <setting name="params" value="" />
+    <setting name="workDir" value="$PROJECT_DIR$" />
+    <setting name="debug" value="false" />
+    <method>
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>

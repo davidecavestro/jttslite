@@ -1,71 +1,31 @@
+defaultTasks 'clean', 'test', 'assemble'
+
 buildscript {
     repositories {
         mavenCentral()
         mavenRepo name: 'Codehaus',       url: 'http://repository.codehaus.org'
         mavenRepo name: 'SpringSource',   url: 'http://repository.springsource.com/maven/bundles/release'
         mavenRepo name: 'Sonaytpe',       url: 'http://repository.sonatype.org/content/groups/public'
-        mavenRepo name: 'Grails Central', url: 'http://repo.grails.org/grails/core/'
-        mavenRepo name: 'JavaNet',        url: 'http://download.java.net/maven/2/'
-	flatDir dirs: 'gradle-lib'
-//	ivy {url 'gradle-ivy-repo'}
-	//mavenLocal()
+        mavenRepo name: 'Grails Central', url: 'http://repo.grails.org/grails/core'
+        mavenRepo name: 'JavaNet',        url: 'http://download.java.net/maven/2'
     }
 
     dependencies {
-        classpath('org.codehaus.griffon:gradle-griffon-plugin:latest.integration')
-        classpath('org.codehaus.griffon:griffon-launcher:latest.integration')//added to obviate missing of gradle-griffon-plugin-1.1.0-SNAPSHOT.pom
-        classpath('org.spockframework:spock-core:0.7-groovy-1.8')//added to obviate missing of griffon-launcher-1.1.0-SNAPSHOT.pom and adapteed for groovy 1.8.x
-        classpath('org.apache.ant:ant:1.8.2')//added to obviate missing of griffon-launcher-ant-1.1.0-SNAPSHOT.pom
-        classpath('org.codehaus.griffon:griffon-scripts:1.1.0')
-        //classpath(':groovy-all:2.0.5')
+        classpath('org.codehaus.griffon:gradle-griffon-plugin:1.1.0')
+        classpath('org.codehaus.griffon:griffon-scripts:1.2.0')
     }
 }
 
-griffonVersion = '1.2.0-SNAPSHOT'
+ext.griffonVersion = '1.2.0'
 version = '0.1'
 
-apply plugin: 'groovy'
 apply plugin: 'griffon'
-
-defaultTasks 'clean', 'test'
 
 repositories {
     mavenCentral()
     mavenRepo name: 'Codehaus', url: 'http://repository.codehaus.org/'
-    flatDir dirs: 'gradle-lib'
-}
-
-configurations {
-    all*.exclude group: 'org.codehaus.groovy', module: 'groovy-all', version: '1.8.0'
 }
 
 dependencies {
     compile "org.codehaus.griffon:griffon-rt:$griffonVersion"
-    //hacked to rebuild griffon deps
-    bootstrap module (":groovy-all:2.0.5") {
-        dependencies ":slf4j-api:1.7.2",
-            ":slf4j-log4j12:1.7.2",
-            ":org.springframework.core:3.1.2.RELEASE",
-            ":jcl-over-slf4j:1.7.2",
-            ":gant_groovy2.0:1.9.8",
-            ":asm:3.2",
-            ":log4j:1.2.17",
-            ":http-builder:0.5.2",
-            ":httpclient:4.1.2",
-            ":httpcore:4.1.2",
-            ":json-lib:2.4:jdk15",
-            ":xml-resolver:1.2",
-            ":ant:1.8.4",
-            ":commons-lang:2.6",
-            ":ant-launcher:1.8.4",
-            ":commons-io:2.4",
-            ":commons-collections:3.2.1"
-            ":junit:4.10"
-            ":ezmorph:1.0.6"
-    }
-    bootstrap ":bndlib:1.50.0"
-    test ":junit:4.10"
-    test ":ant-junit:1.8.4"
-    test ":bndlib:1.50.0"
-
 }

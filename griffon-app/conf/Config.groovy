@@ -9,22 +9,9 @@ log4j = {
 
     info   'griffon.util',
            'griffon.core',
-           'griffon.swing',
+           'griffon.@application.toolkit@',
            'griffon.app'
 }
 
 
-swing {
-    windowManager {
-        defaultHandler = new jttslite.JttsliteWindowDisplayHandler()
-    }
-}
-
-
-i18n.basename = 'messages'
-
 griffon.services.basic.disabled = true
-
-griffon.datasource.injectInto = ["controller", "service"]
-
-griffon.liquibase.rootChangeLogPath = 'classpath:/migrations/RootChangelog.groovy'

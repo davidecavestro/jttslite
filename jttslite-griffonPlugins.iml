@@ -2,34 +2,33 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/charts-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/css-builder-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/datasource-0.5" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/docking-frame-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/fatcowicons-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/glazedlists-1.1.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/gsql-1.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/jbusycomponent-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/jxlayer-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/liquibase-0.1" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/miglayout-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/oxbow-1.0.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/spring-1.1.2" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/swing-1.2.0" />
-    <content url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/swingx-builder-0.7" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/css-builder-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/datasource-0.5" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/docking-frame-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/fatcowicons-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/glazedlists-1.1.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/gsql-1.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jbusycomponent-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jxlayer-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/liquibase-0.1" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/miglayout-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swing-1.2.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swingx-builder-0.7" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0-SNAPSHOT" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (jttslite-griffonPlugins)">
         <CLASSES>
-          <root url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/oxbow-1.0.0/lib" />
-          <root url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/charts-1.0.0/lib" />
+          <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/lib" />
+          <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/charts-1.0.0/lib" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0-SNAPSHOT/projects/jttslite/plugins/oxbow-1.0.0/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>

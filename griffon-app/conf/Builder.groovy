@@ -1,11 +1,7 @@
 
+root.'OxbowGriffonAddon'.addon=true
 
-
-root.'GlazedlistsGriffonAddon'.addon=true
-
-
-
-
+root.'OxbowGriffonAddon'.controller=['ask','confirm','choice','error','inform','input','showException','radioChoice','warn']
 
 jx {
     'groovy.swing.SwingXBuilder' {
@@ -13,18 +9,12 @@ jx {
     }
 }
 
-root.'griffon.builder.css.CSSBuilder'.view = '*'
-root.'griffon.builder.css.CSSBuilder'.controller = ['CSS']
-
-
-
-root.'OxbowGriffonAddon'.addon=true
-
-root.'OxbowGriffonAddon'.controller=['ask','confirm','choice','error','inform','input','showException','radioChoice','warn']
-
 root {
     'groovy.swing.SwingBuilder' {
         controller = ['Threading']
         view = '*'
     }
 }
+
+root.'griffon.builder.css.CSSBuilder'.view = '*'
+root.'griffon.builder.css.CSSBuilder'.controller = ['CSS']

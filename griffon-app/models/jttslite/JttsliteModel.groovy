@@ -1,13 +1,10 @@
 package jttslite
 
 import ca.odell.glazedlists.*
-
-//import org.viewaframework.widget.swing.table.*
 import ca.odell.glazedlists.swing.GlazedListsSwing
+
 import griffon.transform.PropertyListener
 import griffon.transform.Threading
-import org.viewaframework.swing.table.DynamicTableColumn
-import org.viewaframework.swing.table.DynamicTableModel
 
 @PropertyListener (enabler)
 class JttsliteModel {
@@ -43,15 +40,6 @@ class JttsliteModel {
     DisposableMap worklogMap = GlazedLists.syncEventListToMap(worklogList, new WorklogKeyMaker ())
     EventList swingProxyWorklogList = GlazedListsSwing.swingThreadProxyList(observableWorklogList)
 
-    /* Table result model using viewaframework.org DynamicTableModel */
-    @Newify([DynamicTableColumn])
-    def tableModel =
-        new DynamicTableModel([
-                DynamicTableColumn.new(propertyName:"name",order:0,width:400,title:"Start time"/*,renderer:FileNameRendererByType.new()*/),
-                DynamicTableColumn.new(propertyName:"type",order:1,width:100,title:"Finish time"),
-                DynamicTableColumn.new(propertyName:"size",order:2,width:100,title:"Duration"),
-                DynamicTableColumn.new(propertyName:"path",order:3,width:600,title:"Comment")
-        ])
     private final static String LAST_WORKSPACE = 'lastWorkspace'
 
     void mvcGroupInit(Map args) {
