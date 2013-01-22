@@ -22,6 +22,9 @@ class JttsliteModel {
     WorklogService worklogService
     DictionaryService dictionaryService
 
+    /**
+     * the task list
+     */
     BasicEventList taskList = GlazedLists.threadSafeList(new BasicEventList ())
     ObservableElementList observableTaskList = new ObservableElementList (taskList, GlazedLists.beanConnector (ObservableMap.class))
     DisposableMap taskMap = GlazedLists.syncEventListToMap(taskList, new TaskKeyMaker ())

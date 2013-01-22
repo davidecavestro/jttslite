@@ -28,3 +28,15 @@ griffon.services.basic.disabled = true
 griffon.datasource.injectInto = ["controller", "service"]
 
 griffon.liquibase.rootChangeLogPath = 'classpath:/migrations/RootChangelog.groovy'
+
+i18n.basenames = ['messages']
+
+
+
+
+
+
+
+
+
+i18n.provider = 'i18n'
