@@ -2,7 +2,6 @@ package jttslite
 
 import ca.odell.glazedlists.swing.TreeTableSupport
 import net.miginfocom.swing.MigLayout
-
 import org.jfree.chart.ChartPanel
 
 import javax.swing.*
@@ -33,9 +32,12 @@ import java.awt.*
 /* -------------------------------------------------- */
 /* -------------------- LAYOUT ---------------------- */
 /* -------------------------------------------------- */
+
+
+
 splitPane {
     splitPane(id:'mainPanel',orientation:JSplitPane.VERTICAL_SPLIT){
-        dockingFrame(preferredSize: new java.awt.Dimension(300,300)) {
+        dockingFrame(preferredSize: new java.awt.Dimension(300,400)) {
             panel(title:'Tasks'){
                 borderLayout()
                 panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
@@ -55,7 +57,7 @@ splitPane {
 //                    }
 
                     noparent {
-                        selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)
+                        selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)//see https://sites.google.com/site/glazedlists/documentation/faq#TOC-JLists-JTables
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
                     def taskTreeTable = new JTable() {
@@ -66,10 +68,14 @@ splitPane {
 
                     scrollPane {
                         table(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
-                            tableFormat = defaultAdvancedTableFormat(columns: [
-                                    [name: 'title',     title: 'Name'],
-                                    [name: 'treeCode',     title: 'Tree code'],
-                                    [name: 'description', title: 'Description']])
+                            tableFormat = defaultWritableTableFormat(columns: [
+                                    [name: 'title', title: 'Name', write: {baseObject, columnNames, index, editedValue->
+                                        //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
+                                        controller.renameTask (baseObject.id, editedValue)
+                                    }],
+                                    [name: 'treeCode', title: 'Tree code'],
+                                    [name: 'description', title: 'Description']],
+                            editable: {baseObject, columnNames, index->index==0})
                             eventTableModel(source:model.taskTreeList, format:tableFormat)
                             TreeTableSupport treeTableSupport = installTreeTableSupport(source:model.taskTreeList, index:0i)
 
@@ -80,6 +86,7 @@ splitPane {
                                 if ( !evt.isAdjusting) {
 
                                     def selectionIndex = evt.source.leadSelectionIndex
+
 
                                     if (selectionIndex!=null && selectionIndex>=0) {
                                         def task = model.taskList[selectionIndex]
@@ -93,24 +100,16 @@ splitPane {
                                 }
                             }] as ListSelectionListener)
 
+//                            noparent {
+//                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
+//                                    cellRenderer {
+//                                        label(foreground: java.awt.Color.BLACK)
+//                                        onRender { children[0].text = value }
+//                                    }
+//                                )
+//                            }
                         }
                     }
-
-////                    scrollPane {
-//                        treeTable(
-//                            treeTableModel: new FileSystemModel(),
-//                            showHorizontalLines: true,
-//                            showVerticalLines: true
-//                        )
-////                    }
-
-//                            id:'tasks', selectionModel:selectionModel) {
-//                        tableFormat = defaultTableFormat(columnNames:["Name"])
-//                        eventTableModel(source:model.tasks, format:tableFormat)
-//                        installTreeTableSupport(source:model.tasks)
-//                    }
-
-
 
 //                    def delEditor = new MyEditor(taskTree, delRenderer)
 //                    taskTree.setCellEditor(delEditor)
@@ -123,7 +122,7 @@ splitPane {
             }
         }
     }
-    dockingFrame{
+    dockingFrame(preferredSize: new java.awt.Dimension(400,600)){
         panel(title:'Worklogs'){
             borderLayout()
             busyComponent(id: "c1", constraints: CENTER/*, busy: bind(source:model,sourceProperty:'searchResultsPanelEnabled')*/) {
@@ -160,6 +159,11 @@ splitPane {
                             }
                         }] as ListSelectionListener)
 
+                    }
+
+
+                    noparent {
+                        worklogTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer ())
                     }
 
                 }

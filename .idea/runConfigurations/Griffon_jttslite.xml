@@ -2,7 +2,7 @@
   <configuration default="false" name="Griffon:jttslite" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
     <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="run-app" />
+    <setting name="cmdLine" value="-Dgriffon.offline.mode=true run-app" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
     <RunnerSettings RunnerId="GriffonDebugger">

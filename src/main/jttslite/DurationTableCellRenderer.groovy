@@ -25,54 +25,56 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-databaseChangeLog() {
-    //include(path: '20130108-initial-schema.groovy', relativeToChangelog: false)
-    changeSet(id:'initial-schema', author: 'davidecavestro') {
-        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
-            """
-DROP TABLE IF EXISTS dictionary;
-CREATE TABLE dictionary (
-    key VARCHAR (1000) NOT NULL PRIMARY KEY,
-    stringValue VARCHAR (10000),
-    longValue LONG,
-    booleanValue BOOLEAN
-);
+package jttslite
 
-DROP TABLE IF EXISTS workspace;
-CREATE TABLE workspace (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR (4000),
-    description VARCHAR (10000),
-);
+import javax.swing.JLabel
+import javax.swing.JTable
+import java.awt.Component
+import java.awt.Font
 
-DROP TABLE IF EXISTS task;
-CREATE TABLE task (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    workspaceId LONG NOT NULL,
-    parentId LONG,
-    siblingIndex INTEGER NOT NULL,
-    treeCode VARCHAR(1000) NOT NULL,
-    treeDepth LONG NOT NULL,
-    title VARCHAR(4000) NOT NULL,
-    description VARCHAR(10000),
+/**
+ * @author Davide Cavestro
+ */
+class DurationTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
+    private Font _originalFont;
+    private Font _boldFont;
 
-    CONSTRAINT fkTaskWorkspace FOREIGN KEY (workspaceId) REFERENCES workspace ON DELETE CASCADE
+    public Component getTableCellRendererComponent (final JTable table, final Object value, boolean isSelected, boolean hasFocus, final int row, final int column) {
 
-);
+        final JLabel res = (JLabel)super.getTableCellRendererComponent ( table, value, isSelected, hasFocus, row, column);
+        final Long lDuration = (Long)value;
+        final Duration duration = new Duration(lDuration?lDuration:0)
+//        final Task t = tduration.getTask ();
 
-DROP TABLE IF EXISTS worklog;
-CREATE TABLE worklog (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    taskId LONG NOT NULL,
-    start DATETIME NOT NULL, // start time
-    amount LONG, //duration in millis
-    comment VARCHAR(10000),
 
-    CONSTRAINT fkWorklogTask FOREIGN KEY (taskId) REFERENCES task ON DELETE CASCADE
-
-)
-
-"""
+        if (null==_originalFont) {
+            _originalFont = res.getFont ();
         }
+        if (null==_boldFont) {
+            _boldFont = _originalFont.deriveFont (Font.BOLD);
+        }
+
+        boolean progressing = false;
+
+//        for (final TaskTreePath p : _progressingPaths) {
+//            if (p.contains (t)) {
+//                progressing = true;
+//                break;
+//            }
+//        }
+        if (progressing) {
+            res.setFont (_boldFont);
+        } else {
+            res.setFont (_originalFont);
+        }
+
+        if (duration.getTime ()==0){
+            res.setText ("");
+        } else {
+            res.setText (DurationUtils.format (duration));
+        }
+
+        setHorizontalAlignment (TRAILING);
+        return res;
     }
 }

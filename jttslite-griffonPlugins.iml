@@ -24,6 +24,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (jttslite-griffonPlugins)">
         <CLASSES>

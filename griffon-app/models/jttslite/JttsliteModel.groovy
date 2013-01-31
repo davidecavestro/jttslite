@@ -17,20 +17,26 @@ class JttsliteModel {
     @Bindable boolean startEnabled
     @Bindable boolean stopEnabled
 
-    WorkspaceService workspaceService
     TaskService taskService
     WorklogService worklogService
-    DictionaryService dictionaryService
+
+    /*
+     a closure to enable/disable buttons
+    */
+    private enabler = {e->
+        startEnabled = selectedTaskId!=null && !inProgress
+        stopEnabled = inProgress
+    }
 
     /**
      * the task list
      */
     BasicEventList taskList = GlazedLists.threadSafeList(new BasicEventList ())
     ObservableElementList observableTaskList = new ObservableElementList (taskList, GlazedLists.beanConnector (ObservableMap.class))
-    DisposableMap taskMap = GlazedLists.syncEventListToMap(taskList, new TaskKeyMaker ())
+    DisposableMap taskMap = GlazedLists.syncEventListToMap(observableTaskList, new TaskKeyMaker ())
     EventList swingProxyTaskList = GlazedListsSwing.swingThreadProxyList(observableTaskList)//hack to avoid NPE on GL treetable
     def taskTreeNodeComparator = {a,b->
-        def level = a.treeLevel <=> b.treeLevel
+        def level = a.treeDepth <=> b.treeDepth
         if (level!=0) {
             return level
         }
@@ -43,17 +49,19 @@ class JttsliteModel {
     DisposableMap worklogMap = GlazedLists.syncEventListToMap(worklogList, new WorklogKeyMaker ())
     EventList swingProxyWorklogList = GlazedListsSwing.swingThreadProxyList(observableWorklogList)
 
-    private final static String LAST_WORKSPACE = 'lastWorkspace'
 
-    void mvcGroupInit(Map args) {
-        status = "Welcome to ${GriffonNameUtils.capitalize(app.getMessage('application.title'))}"
-    }
+
 
     public void setSelectedTaskId (Long taskId) {
         selectedTaskId = taskId
         worklogList.clear()
         if (taskId!=null) {
-            worklogList.addAll(worklogService.getWorklogs(taskId).collect {it as ObservableMap})
+            execOutsideUI {
+                def newData = worklogService.getWorklogs(taskId).collect {it as ObservableMap}
+                execInsideUIAsync {
+                    worklogList.addAll(newData)
+                }
+            }
         }
     }
 
@@ -68,51 +76,9 @@ class JttsliteModel {
         }
     }
 
-    /*
-     a closure to enable/disable buttons
-    */
-    private enabler = {e->
-        startEnabled = selectedTaskId!=null && !inProgress
-        stopEnabled = inProgress
-    }
 
-    def loadTasksForWorkspace(def workspaceId) {
-        loadTasks (taskService.getTasks(workspaceId).collect {it as ObservableMap})
-        loadRunningWorklog (workspaceId)
-    }
-
-    def loadRunningWorklog(def workspaceId) {
-        setInProgressWorklogId (worklogService.getRunningWorklog (workspaceId)?.id)
-    }
-
-    @Threading(Threading.Policy.INSIDE_UITHREAD_SYNC)
-    def loadTasks(def tasks) {
-//        edt{
-            taskList.addAll (tasks)
-//        }
-    }
-
-    /**
-     * Load the last workspace loaded (upon restart). If this is the first run the last workspace loaded is no more
-     * available loads the first available workspace.
-     *
-     * <p>
-     *     Loading a workspace implies loading its data into application UI.
-     * </p>
-     */
-    def loadLastWorkspace() {
-        workspaceId = dictionaryService.getLongValue(LAST_WORKSPACE)
-        if (workspaceId==null || !workspaceService.getWorkspace (workspaceId)) {
-            /*
-            if there's no last workspace memory or it is no more available
-            load the first available workspace
-             */
-            workspaceId = workspaceService.getWorkspaces ()[0].id
-        }
-        loadTasksForWorkspace (workspaceId)
-    }
-    def saveLastWorkspace() {
-        dictionaryService.doSaveLong(LAST_WORKSPACE, workspaceId)
+    void mvcGroupInit(Map args) {
+        status = "Welcome to ${GriffonNameUtils.capitalize(app.getMessage('application.title'))}"
     }
 
     private class TaskTreeFormat implements TreeList.Format {
@@ -131,20 +97,10 @@ class JttsliteModel {
         }
 
         @Override
-        public Comparator getComparator(int arg0) {
-            return null
-//            @SuppressWarnings("unchecked")
-//            final Comparator comparator = GlazedLists.chainComparators(
-////                    GlazedLists.beanPropertyComparator(Location.class, "continent"),
-////                    GlazedLists.beanPropertyComparator(Location.class, "country"),
-////                    GlazedLists.beanPropertyComparator(Location.class, "province"),
-////                    GlazedLists.beanPropertyComparator(Location.class, "city")
-//            );
-//
-//            return comparator;
+        public Comparator getComparator(int depth) {
+            {a, b -> a.siblingIndex <=> b.siblingIndex} as Comparator
         }
     }
-
 
     class TaskKeyMaker implements FunctionList.Function<Map, Object> {
 

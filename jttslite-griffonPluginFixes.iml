@@ -120,6 +120,20 @@
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/dist/griffon-oxbow-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/dist/griffon-charts-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jxlayer-1.0.0/dist/griffon-jxlayer-1.0.0-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/test" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/japex/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/jgoodiesforms/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/calculation/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/hibernate/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/nachocalendar/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/jfreechart/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/issuesbrowser/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/icu4j/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/treetable/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/swinglabs/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/ktable/source" />
+          <root url="jar://$MODULE_DIR$/lib/glazedlists-1.8.0-source_java15.zip!/extensions/swt/source" />
         </SOURCES>
       </library>
     </orderEntry>
