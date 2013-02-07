@@ -24,8 +24,8 @@
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib (jttslite-griffonPlugins)">
         <CLASSES>
-          <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" />
           <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/lib" />
+          <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
