@@ -25,54 +25,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-databaseChangeLog() {
-    //include(path: '20130108-initial-schema.groovy', relativeToChangelog: false)
-    changeSet(id:'initial-schema', author: 'davidecavestro') {
-        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
-            """
-DROP TABLE IF EXISTS dictionary;
-CREATE TABLE dictionary (
-    key VARCHAR (1000) NOT NULL PRIMARY KEY,
-    stringValue VARCHAR (10000),
-    longValue LONG,
-    booleanValue BOOLEAN
-);
+package jttslite;
 
-DROP TABLE IF EXISTS workspace;
-CREATE TABLE workspace (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR (4000),
-    description VARCHAR (10000),
-);
+import java.text.DecimalFormat;
 
-DROP TABLE IF EXISTS task;
-CREATE TABLE task (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    workspaceId LONG NOT NULL,
-    parentId LONG,
-    siblingIndex INTEGER NOT NULL,
-    treeCode VARCHAR(1000) NOT NULL,
-    treeDepth LONG NOT NULL,
-    title VARCHAR(4000) NOT NULL,
-    description VARCHAR(10000),
+/**
+ * @author Davide Cavestro
+ */
+public class DurationUtils {
 
-    CONSTRAINT fkTaskWorkspace FOREIGN KEY (workspaceId) REFERENCES workspace ON DELETE CASCADE
+    private DurationUtils (){}
 
-);
+    private final static DurationNumberFormatter durationNumberFormatter = new DurationNumberFormatter ();
 
-DROP TABLE IF EXISTS worklog;
-CREATE TABLE worklog (
-    id LONG NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    taskId LONG NOT NULL,
-    start DATETIME NOT NULL, // start time
-    amount LONG, //duration in millis
-    comment VARCHAR(10000),
-
-    CONSTRAINT fkWorklogTask FOREIGN KEY (taskId) REFERENCES task ON DELETE CASCADE
-
-)
-
-"""
+    public static class DurationNumberFormatter extends DecimalFormat {
+        public DurationNumberFormatter (){
+            setMinimumIntegerDigits (2);
         }
     }
+
+    public static String format (final Duration d) {
+        final StringBuilder sb = new StringBuilder ();
+
+        sb.append (durationNumberFormatter.format (d.getTotalHours ()))
+                .append (":")
+                .append (durationNumberFormatter.format (d.getMinutes ()))
+                .append (":")
+                .append (durationNumberFormatter.format (d.getSeconds ()));
+        return sb.toString ();
+    }
+
+    public static String formatDuration (final long d) {
+        final StringBuilder sb = new StringBuilder ();
+
+        final long[] f = Duration.getDurationFields (d);
+
+        sb.append (durationNumberFormatter.format (f[Duration.HOURS_SLOT]))
+                .append (":")
+                .append (durationNumberFormatter.format (f[Duration.MINUTES_SLOT]))
+                .append (":")
+                .append (durationNumberFormatter.format (f[Duration.SECONDS_SLOT]));
+        return sb.toString ();
+    }
+
+
+
 }

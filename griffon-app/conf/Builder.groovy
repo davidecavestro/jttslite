@@ -20,3 +20,5 @@ root {
 
 root.'griffon.builder.css.CSSBuilder'.view = '*'
 root.'griffon.builder.css.CSSBuilder'.controller = ['CSS']
+
+root.'griffon.builder.jide.JideBuilder'.view = '*'

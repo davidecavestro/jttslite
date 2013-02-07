@@ -2,7 +2,7 @@
   <configuration default="false" name="Griffon:jttslite clear-dependency-cache" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
     <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="clear-dependency-cache" />
+    <setting name="cmdLine" value="-Dgriffon.offline.mode=true clear-dependency-cache" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
     <method />

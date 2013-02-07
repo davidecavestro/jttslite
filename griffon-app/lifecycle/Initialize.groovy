@@ -13,3 +13,4 @@
  */
 
 
+SplashGriffonAddon.display(app)

@@ -172,6 +172,7 @@ griffon.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime' or 'test' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
+        compile 'joda-time:joda-time:2.1'
     }
 }
 

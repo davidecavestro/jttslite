@@ -92,6 +92,13 @@ class TaskService {
         }
     }
 
+    public void doRename(def id, def title) {
+        withSql { String dataSourceName, Sql sql ->
+            sql.executeUpdate('UPDATE task SET title=? WHERE id=?',
+                    [title, id]) != null
+        }
+    }
+
     public void doMove(def id, def parentId, def siblingIndex) {
         def task = getTask (id)
         assert task.parentId!=null, "Cannot move workspace root"
