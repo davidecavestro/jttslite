@@ -44,4 +44,11 @@ mvcGroups {
         controller = 'jttslite.JttsliteController'
     }
 
+    // MVC Group for "jttslite"
+    'workspaces' {
+        model      = 'jttslite.WorkspacesModel'
+        view       = 'jttslite.WorkspacesView'
+        controller = 'jttslite.DialogController'
+    }
+
 }

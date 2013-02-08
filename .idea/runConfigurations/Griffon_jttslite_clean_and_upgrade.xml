@@ -2,11 +2,11 @@
   <configuration default="false" name="Griffon:jttslite clean and upgrade" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
     <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="-Dgriffon.offline.mode=true -Dgriffon.artifact.force.upgrade=true clean" />
+    <setting name="cmdLine" value="-Dgriffon.artifact.force.upgrade=true clean" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
-    <method>
-      <option name="Make" enabled="false" />
-    </method>
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
+    <method />
   </configuration>
 </component>

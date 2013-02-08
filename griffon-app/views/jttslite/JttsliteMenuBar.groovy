@@ -8,6 +8,8 @@ menuBar = menuBar {
         menuItem(newAction)
         menuItem(openAction)
         separator()
+        menuItem(editWorkspacesAction)
+        separator()
         menuItem(saveAction)
         menuItem(saveAsAction)
         if(!isMacOSX) {

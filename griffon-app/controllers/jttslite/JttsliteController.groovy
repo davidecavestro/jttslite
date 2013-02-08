@@ -62,6 +62,12 @@ class JttsliteController {
     def deleteAction = {
     }
 
+    def editWorkspacesAction = {
+        withMVCGroup('workspaces') { m, v, c ->
+            c.show()
+        }
+    }
+
     def onOSXAbout = { app ->
         withMVCGroup('about') { m, v, c ->
             c.show()

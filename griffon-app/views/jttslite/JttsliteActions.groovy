@@ -21,10 +21,13 @@ actions {
             enabled: bind {model.startEnabled},
             closure: controller.&startProgress
     )
+
     action(
             id: "stopWorkLogAction",
             name: "Stop",
             enabled: bind {model.stopEnabled},
             closure: controller.&stopProgress
     )
+
+    action(editWorkspacesAction, enabled: true)
 }
