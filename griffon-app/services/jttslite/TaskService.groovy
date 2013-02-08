@@ -130,18 +130,12 @@ class TaskService {
     }
     def getTask(def id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT * FROM task WHERE id=?', [id])
+            sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE id=?', [id])
         }
     }
     def getTasks(def workspaceId) {
         withSql { String dataSourceName, Sql sql ->
-            def result=[]
-            sql.eachRow('SELECT * FROM task WHERE workspaceId=?',
-                    [workspaceId], {
-                        result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeDepth: it.treeDepth, treeCode:it.treeCode, title:it.title, description:it.description]
-                    }
-            )
-            return result
+            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=?',[workspaceId])
         }
     }
 

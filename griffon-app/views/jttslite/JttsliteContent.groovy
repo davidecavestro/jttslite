@@ -73,8 +73,8 @@ splitPane {
                                         //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
                                         controller.renameTask (baseObject.id, editedValue)
                                     }],
-                                    [name: 'treeCode', title: 'Tree code'],
-                                    [name: 'description', title: 'Description']],
+                                    [name: 'localAmount', title: 'Local amount'],
+                                    [name: 'globalAmount', title: 'Subtree amount']],
                             editable: {baseObject, columnNames, index->index==0})
                             eventTableModel(source:model.taskTreeList, format:tableFormat)
                             TreeTableSupport treeTableSupport = installTreeTableSupport(source:model.taskTreeList, index:0i)
@@ -100,6 +100,10 @@ splitPane {
                                 }
                             }] as ListSelectionListener)
 
+                            noparent {
+                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer ())
+                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer ())
+                            }
 //                            noparent {
 //                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
 //                                    cellRenderer {

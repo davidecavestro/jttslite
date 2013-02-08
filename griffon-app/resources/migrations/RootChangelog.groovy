@@ -70,9 +70,65 @@ CREATE TABLE worklog (
 
     CONSTRAINT fkWorklogTask FOREIGN KEY (taskId) REFERENCES task ON DELETE CASCADE
 
-)
+);
 
 """
         }
     }
+    changeSet(id:'20130201-addtimestamps', author: 'davidecavestro') {
+        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
+"""
+ALTER TABLE dictionary ADD COLUMN ts TIMESTAMP AS CURRENT_TIMESTAMP();
+ALTER TABLE workspace ADD COLUMN ts TIMESTAMP AS CURRENT_TIMESTAMP();
+ALTER TABLE task ADD COLUMN ts TIMESTAMP AS CURRENT_TIMESTAMP();
+ALTER TABLE worklog ADD COLUMN ts TIMESTAMP AS CURRENT_TIMESTAMP();
+"""
+        }
+    }
+    /*
+    changeSet(id:'20130201-addtaskdurations', author: 'davidecavestro') {
+        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
+            """
+ALTER TABLE task ADD COLUMN localAmount LONG; //direct duration in millis
+ALTER TABLE task ADD COLUMN globalAmount LONG; //subtree + direct duration in millis
+
+"""
+        }
+    } */
+
+    changeSet(id:'20130203-addtaskamounts', author: 'davidecavestro') {
+        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
+            """\
+CREATE VIEW task_worklogs AS
+(
+SELECT
+    tk.id,
+    SUM (wl.amount) AS localAmount,
+    MIN (
+        SELECT
+            SUM (wl1.amount)
+        FROM
+            worklog wl1 INNER JOIN task tk1 ON (wl1.taskId=tk1.id) WHERE tk1.treeCode LIKE CONCAT (tk.treeCode, '%')) AS globalAmount
+FROM
+    worklog wl RIGHT OUTER JOIN task tk ON (wl.taskid=tk.id)
+GROUP BY
+    tk.id
+);
+"""
+        }
+    }
+    changeSet(id:'20130206-addworklogview', author: 'davidecavestro') {
+        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
+            """\
+CREATE VIEW worklog_period AS
+(
+SELECT
+    id, start, DATEADD ('MS', amount, start) AS finish, amount
+FROM worklog
+);
+"""
+        }
+    }
+
+
 }
