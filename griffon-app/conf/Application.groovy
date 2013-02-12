@@ -48,7 +48,7 @@ mvcGroups {
     'workspaces' {
         model      = 'jttslite.WorkspacesModel'
         view       = 'jttslite.WorkspacesView'
-        controller = 'jttslite.DialogController'
+        controller = 'jttslite.WorkspacesController'
     }
 
 }

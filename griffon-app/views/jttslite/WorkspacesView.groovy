@@ -45,7 +45,7 @@ actions {
 
 panel(id: 'content') {
     migLayout layoutConstraints: 'fill'
-    scrollPane(constraints: 'grow, wrap') {
+    scrollPane(constraints: 'grow') {
         def selectionModel
 
         noparent {
@@ -56,7 +56,8 @@ panel(id: 'content') {
         def workspaceTable = new JTable()
         table(workspaceTable, id:'workspaceTable', selectionModel:selectionModel) {
             tableFormat = defaultAdvancedTableFormat(columns: [
-                    [name: 'name',     title: 'Name']
+                        [name: 'name',     title: 'Name'],
+                        [name: 'description',     title: 'Description']
                     ])
             eventTableModel(source:model.swingProxyWorkspaceList, format:tableFormat)
 
@@ -75,12 +76,16 @@ panel(id: 'content') {
         }
     }
 
-    button(createWorkspaceAction, constraints: 'right')
-    button(openWorkspaceAction, constraints: 'right')
-    button(deleteWorkspaceAction, constraints: 'right')
-    button(exportWorkspaceAction, constraints: 'right')
-    button(importWorkspaceAction, constraints: 'right')
-    button(hideAction, constraints: 'right')
+    panel(id: 'buttonsPanel'){
+        migLayout layoutConstraints: 'fill'
+        button(createWorkspaceAction, constraints: 'right, wrap')
+        button(openWorkspaceAction, constraints: 'right, wrap')
+        button(deleteWorkspaceAction, constraints: 'right, wrap')
+        button(exportWorkspaceAction, constraints: 'right, wrap')
+        button(importWorkspaceAction, constraints: 'right, wrap')
+        button(hideAction, constraints: 'right, wrap')
+    }
+
 
     keyStrokeAction(component: current,
             keyStroke: 'ESCAPE',
