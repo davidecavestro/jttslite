@@ -82,27 +82,55 @@ splitPane {
                             treeTableSupport.arrowKeyExpansionEnabled = true
                             treeTableSupport.showExpanderForEmptyParent = true
 
-                            current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
-                                if ( !evt.isAdjusting) {
-
-                                    def selectionIndex = evt.source.leadSelectionIndex
-
-
-                                    if (selectionIndex!=null && selectionIndex>=0) {
-                                        def task = model.taskList[selectionIndex]
-                                        //controller.selectedTaskChanged (task.id)
-                                        model.selectedTaskId = task.id
-                                        //... do stuff with the selected index ...
-                                    } else {
-                                        model.selectedTaskId = null
-                                        //controller.selectedTaskChanged (null)
-                                    }
-                                }
-                            }] as ListSelectionListener)
-
                             noparent {
-                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer ())
-                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer ())
+                                Font originalFont
+                                Font boldFont
+
+                                def durationCellRenderer = new DurationTableCellRenderer (durationClosure: {
+                                    if (model.workingLog) {
+                                        return System.currentTimeMillis() - model.workingLog.start.time
+                                    }
+                                    0l
+                                }, fontClosure: {JLabel res, row->
+
+                                    def task = taskTreeTable.model.getElementAt(row)
+                                    boolean progressing = model.workingPathIds.any {task.id==it};
+
+                                    if (progressing) {
+                                        if (null==originalFont) {
+                                            originalFont = res.getFont ();
+                                        }
+                                        if (null==boldFont) {
+                                            boldFont = originalFont.deriveFont (Font.BOLD);
+                                        }
+
+                                        res.setFont (boldFont);
+                                    } else {
+                                        res.setFont (originalFont);
+                                    }
+
+
+                                })
+                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(durationCellRenderer)
+                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(durationCellRenderer)
+
+                                taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
+                                    if ( !evt.isAdjusting) {
+
+                                        def selectionIndex = evt.source.leadSelectionIndex
+
+
+                                        if (selectionIndex!=null && selectionIndex>=0) {
+                                            def task = taskTreeTable.model.getElementAt (selectionIndex)
+                                            //controller.selectedTaskChanged (task.id)
+                                            model.selectedTaskId = task.id
+                                            //... do stuff with the selected index ...
+                                        } else {
+                                            model.selectedTaskId = null
+                                            //controller.selectedTaskChanged (null)
+                                        }
+                                    }
+                                }] as ListSelectionListener)
                             }
 //                            noparent {
 //                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
@@ -167,7 +195,34 @@ splitPane {
 
 
                     noparent {
-                        worklogTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer ())
+                        Font originalFont
+                        Font boldFont
+
+                        worklogTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (durationClosure: {
+                            if (model.workingLog) {
+                                return System.currentTimeMillis() - model.workingLog.start.time
+                            }
+                            0l
+                        }, fontClosure: {JLabel res, row->
+
+                            def worklog = worklogTable.model.getElementAt(row)
+                            boolean progressing = worklog.amount==null;
+
+                            if (null==originalFont) {
+                                originalFont = res.getFont ();
+                            }
+                            if (progressing) {
+                                if (null==boldFont) {
+                                    boldFont = originalFont.deriveFont (Font.BOLD);
+                                }
+                                res.setFont (boldFont);
+                            } else {
+                                res.setFont (originalFont);
+                            }
+
+
+                        }
+                        ))
                     }
 
                 }

@@ -37,7 +37,7 @@ class WorklogService {
         }
     }
 
-    def getRunningWorklog(def workspaceId) {
+    def getWorkingLog(def workspaceId) {
         withSql { String dataSourceName, Sql sql ->
             sql.firstRow('SELECT worklog.id AS id, worklog.taskId AS taskId, worklog.start AS start, worklog.amount AS amount, worklog.comment AS comment FROM worklog, task WHERE worklog.amount IS NULL AND worklog.taskId=task.id AND task.workspaceId=?',[workspaceId])
         }

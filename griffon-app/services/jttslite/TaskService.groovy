@@ -130,7 +130,7 @@ class TaskService {
     }
     def getTask(def id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE id=?', [id])
+            sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.id=?', [id])
         }
     }
     def getTasks(def workspaceId) {
@@ -139,21 +139,21 @@ class TaskService {
         }
     }
 
-    def getTaskPath(def taskId) {
+    def getTaskPathIds(def taskId) {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
             sql.eachRow("""
-            WITH link(id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId) AS (
-                SELECT id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId
+             WITH link(id, parentId, treeCode) AS (
+                SELECT id, parentId, treeCode
                 FROM task
                 WHERE task.id=${taskId}
                 UNION ALL
-                SELECT task.id, task.title, task.parentId, task.siblingIndex, task.treeDepth, task.treeCode, task.description, task.workspaceId
+                SELECT task.id, task.parentId, task.treeCode
                 FROM link INNER JOIN task ON link.parentid = task.id
-            ) SELECT id, title, parentId, siblingIndex, treeDepth, treeCode, description, workspaceId FROM link ORDER BY treeCode ASC;
-                """,
+            ) SELECT id FROM link ORDER BY treeCode ASC;
+            """,
                 [/*taskId*/], {
-                    result<<[id:it.id, workspaceId:it.workspaceId, parentId:it.parentId, siblingIndex:it.siblingIndex, treeDepth:it.treeDepth,  treeCode:it.treeCode, title:it.title, description:it.description]
+                    result<< it.id
                 }
             )
             result

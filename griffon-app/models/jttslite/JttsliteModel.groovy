@@ -4,18 +4,20 @@ import ca.odell.glazedlists.*
 import ca.odell.glazedlists.swing.GlazedListsSwing
 
 import griffon.transform.PropertyListener
-import griffon.transform.Threading
 
 @PropertyListener (enabler)
 class JttsliteModel {
-    @Bindable boolean inProgress
+    @Bindable boolean working
     @Bindable String status
     @Bindable Long selectedTaskId
-    @Bindable Long inProgressWorklogId
+    @Bindable Long workingLogId
     @Bindable Long workspaceId
 
     @Bindable boolean startEnabled
     @Bindable boolean stopEnabled
+
+    def workingLog
+    List workingPathIds //ids of tasks on the path from the "running" worklog to the root
 
     TaskService taskService
     WorklogService worklogService
@@ -24,8 +26,8 @@ class JttsliteModel {
      a closure to enable/disable buttons
     */
     private enabler = {e->
-        startEnabled = selectedTaskId!=null && !inProgress
-        stopEnabled = inProgress
+        startEnabled = selectedTaskId!=null && !working
+        stopEnabled = working
     }
 
     /**
@@ -52,6 +54,7 @@ class JttsliteModel {
 
 
 
+
     public void setSelectedTaskId (Long taskId) {
         selectedTaskId = taskId
         worklogList.clear()
@@ -65,14 +68,15 @@ class JttsliteModel {
         }
     }
 
-    public void setInProgressWorklogId (Long worklogId) {
-        inProgressWorklogId = worklogId
-        def running = inProgressWorklogId!=null
-        inProgress = running
-        if (running) {
-            status = app.getMessage('application.title')
+    public void setWorkingLogId (Long worklogId) {
+        workingLogId = worklogId
+        working = workingLogId!=null
+        if (working) {
+            status = app.getMessage('status.working')
+            def worklog = worklogService.getWorklog(worklogId)
+            workingPathIds = taskService.getTaskPathIds(worklog.taskId)
         } else {
-
+            workingPathIds = null
         }
     }
 
@@ -83,10 +87,10 @@ class JttsliteModel {
 
     private class TaskTreeFormat implements TreeList.Format {
         public void getPath(List path, Object element) {
-            def taskPath = taskService.getTaskPath (element.id)
+            def taskPath = taskService.getTaskPathIds (element.id)
 
-            def elems = taskPath.collect {elem->
-                def origElem = taskMap.get(elem.id)
+            def elems = taskPath.collect {pathId->
+                def origElem = taskMap.get(pathId)
                 return origElem
             }
             path.addAll (elems)

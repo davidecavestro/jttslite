@@ -33,39 +33,30 @@ import java.awt.Component
 import java.awt.Font
 
 /**
+ * Renders a duration value.
+ *
  * @author Davide Cavestro
  */
 class DurationTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
-    private Font _originalFont;
-    private Font _boldFont;
+
+    Closure<Long> durationClosure
+    Closure fontClosure
 
     public Component getTableCellRendererComponent (final JTable table, final Object value, boolean isSelected, boolean hasFocus, final int row, final int column) {
 
         final JLabel res = (JLabel)super.getTableCellRendererComponent ( table, value, isSelected, hasFocus, row, column);
         final Long lDuration = (Long)value;
-        final Duration duration = new Duration(lDuration?lDuration:0)
-//        final Task t = tduration.getTask ();
+        Duration duration = new Duration(lDuration?lDuration:0)
 
-
-        if (null==_originalFont) {
-            _originalFont = res.getFont ();
-        }
-        if (null==_boldFont) {
-            _boldFont = _originalFont.deriveFont (Font.BOLD);
+        if (fontClosure) {
+            fontClosure.call (res, row)
         }
 
-        boolean progressing = false;
-
-//        for (final TaskTreePath p : _progressingPaths) {
-//            if (p.contains (t)) {
-//                progressing = true;
-//                break;
-//            }
-//        }
-        if (progressing) {
-            res.setFont (_boldFont);
-        } else {
-            res.setFont (_originalFont);
+        if (durationClosure) {
+            def valueToAdd = durationClosure.call()
+            if (valueToAdd) {
+                duration = new Duration(duration.totalMilliseconds + valueToAdd)
+            }
         }
 
         if (duration.getTime ()==0){
