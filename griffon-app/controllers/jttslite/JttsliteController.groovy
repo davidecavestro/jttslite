@@ -108,14 +108,16 @@ class JttsliteController {
     }
 
     def onStartProgress = { evt = null ->
-        model.inProgressWorklogId = worklogService.doStart(model.selectedTaskId)
+        model.workingLogId = worklogService.doStart(model.selectedTaskId)
+        startTimer ()
 
-        model.worklogList.add (worklogService.getWorklog(model.inProgressWorklogId) as ObservableMap)
+        model.worklogList.add (worklogService.getWorklog(model.workingLogId) as ObservableMap)
     }
     def onStopProgress = { evt = null ->
-        worklogService.doStop(model.inProgressWorklogId)
-        model.worklogMap[model.inProgressWorklogId] = worklogService.getWorklog(model.inProgressWorklogId) as ObservableMap
-        model.inProgressWorklogId = null
+        worklogService.doStop(model.workingLogId)
+        model.worklogMap[model.workingLogId] = worklogService.getWorklog(model.workingLogId) as ObservableMap
+        model.workingLogId = null
+        stopTimer ()
     }
 
     def onStartupEnd = {SwingApplication app->
@@ -174,11 +176,12 @@ def whenSpringReadyEnd = {app, applicationContext->
 
     def loadTasksForWorkspace(def workspaceId) {
         loadTasks (taskService.getTasks(workspaceId).collect {it as ObservableMap})
-        loadRunningWorklog (workspaceId)
+        loadWorkingLog (workspaceId)
     }
 
-    def loadRunningWorklog(def workspaceId) {
-        model.inProgressWorklogId = worklogService.getRunningWorklog (workspaceId)?.id
+    def loadWorkingLog(def workspaceId) {
+        model.workingLogId = worklogService.getWorkingLog (workspaceId)?.id
+        startTimer ()
     }
 
     @Threading(Threading.Policy.INSIDE_UITHREAD_SYNC)
@@ -216,5 +219,38 @@ def whenSpringReadyEnd = {app, applicationContext->
     def renameTask (def taskId, def newName) {
         taskService.doRename(taskId, newName)
         model.taskMap[taskId].title = newName
+    }
+
+    TimerTask updateRunningTicTask
+
+    def onWorkingTic(TimerTask timerTask) {
+        if (model.working) {
+            model.workingPathIds.each {taskId->
+                def modelTask = model.taskMap[taskId]
+                modelTask.firePropertyUpdatedEvent ('localAmount', modelTask.localAmount, modelTask.localAmount)
+                modelTask.firePropertyUpdatedEvent ('globalAmount', modelTask.globalAmount, modelTask.globalAmount)
+            }
+
+            //view.systemTray.trayIcons[0].toolTip = "Pracujesz już ${HourMin.since model.startedWorkingAt}".toString()
+        } else {
+            timerTask.cancel()
+            //view.systemTray.trayIcons[0].toolTip = = "Obecnie nie pracujesz."
+        }
+    }
+
+    Timer timer = new Timer()
+    def startTimer () {
+        timer = new Timer()
+        updateRunningTicTask = new TimerTask() {
+            @Override
+            void run() {
+                onWorkingTic (this)
+            }
+        }
+        timer.schedule (updateRunningTicTask, 0l, 1000l)
+    }
+    def stopTimer () {
+        updateRunningTicTask.cancel ()
+        timer.purge()
     }
 }

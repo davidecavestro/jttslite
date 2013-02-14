@@ -20,6 +20,7 @@
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/spring-1.2.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swing-1.2.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swingx-builder-0.7" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/tray-builder-0.8" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/validation-1.0.2" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
