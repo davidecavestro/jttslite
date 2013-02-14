@@ -21,6 +21,7 @@ class WorkspacesModel extends AbstractDialogModel {
     ObservableElementList observableWorkspaceList = new ObservableElementList (workspaceList, GlazedLists.beanConnector (ObservableMap.class))
     DisposableMap workspaceMap = GlazedLists.syncEventListToMap(workspaceList, new WorkspaceMaker ())
     EventList swingProxyWorkspaceList = GlazedListsSwing.swingThreadProxyList(observableWorkspaceList)
+    Long selectedWorkspaceId
 
     @Override
     protected String getDialogKey() {
@@ -34,15 +35,6 @@ class WorkspacesModel extends AbstractDialogModel {
 
     public void setSelectedWorkspaceId (Long workspaceId) {
         selectedWorkspaceId = workspaceId
-        workspaceList.clear()
-        if (workspaceId!=null) {
-            execOutsideUI {
-                def newData = workspaceService.getWorkspace(workspaceId).collect {it as ObservableMap}
-                execInsideUIAsync {
-                    workspaceList.addAll(newData)
-                }
-            }
-        }
     }
 
     void mvcGroupInit(Map<String, Object> args) {

@@ -1,5 +1,7 @@
 package jttslite
 
+import ca.odell.glazedlists.EventList
+
 import javax.swing.JTable
 import javax.swing.ListSelectionModel
 import javax.swing.event.ListSelectionEvent
@@ -55,20 +57,25 @@ panel(id: 'content') {
 
         def workspaceTable = new JTable()
         table(workspaceTable, id:'workspaceTable', selectionModel:selectionModel) {
-            tableFormat = defaultAdvancedTableFormat(columns: [
-                        [name: 'name',     title: 'Name'],
-                        [name: 'description',     title: 'Description']
-                    ])
+            tableFormat = defaultWritableTableFormat(columns: [
+                        [name: 'name',     title: 'Name',  write: {baseObject, columnNames, index, editedValue->
+                            baseObject.name =  editedValue
+                            controller.updateWorkspace (baseObject.id, editedValue, baseObject.description)
+                        }],
+                        [name: 'description',     title: 'Description' ,  write: {baseObject, columnNames, index, editedValue->
+                            baseObject.description =  editedValue
+                            controller.updateWorkspace (baseObject.id, baseObject.name, editedValue)
+                        }]
+                    ],editable: {baseObject, columnNames, index->index==0})
             eventTableModel(source:model.swingProxyWorkspaceList, format:tableFormat)
 
             current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                 if ( !evt.isAdjusting) {
-
                     def selectionIndex = evt.source.leadSelectionIndex
-
                     if (selectionIndex!=null && selectionIndex>=0) {
-                        //... do stuff with the selected index ...
-                    } else {
+                        //cambio di selezione
+                        EventList selected = selectionModel.getSelected()
+                        model.setSelectedWorkspaceId(selected.get(0).id)
                     }
                 }
             }] as ListSelectionListener)
@@ -78,12 +85,12 @@ panel(id: 'content') {
 
     panel(id: 'buttonsPanel'){
         migLayout layoutConstraints: 'fill'
-        button(createWorkspaceAction, constraints: 'right, wrap')
-        button(openWorkspaceAction, constraints: 'right, wrap')
-        button(deleteWorkspaceAction, constraints: 'right, wrap')
-        button(exportWorkspaceAction, constraints: 'right, wrap')
-        button(importWorkspaceAction, constraints: 'right, wrap')
-        button(hideAction, constraints: 'right, wrap')
+        button(createWorkspaceAction, constraints: 'growx, right, wrap')
+        button(openWorkspaceAction, constraints: 'growx,right, wrap')
+        button(deleteWorkspaceAction, constraints: 'growx,right, wrap')
+        button(exportWorkspaceAction, constraints: 'growx,right, wrap')
+        button(importWorkspaceAction, constraints: 'growx,right, wrap')
+        button(hideAction, constraints: 'growx, right, wrap')
     }
 
 

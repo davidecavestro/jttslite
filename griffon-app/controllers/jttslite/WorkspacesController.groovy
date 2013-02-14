@@ -54,19 +54,25 @@ class WorkspacesController {
         }
     }
 
-    def openWorkspace = {
+    def updateWorkspace(def workspaceId, def newName, def newDescription) {
+        workspaceService.doUpdate(workspaceId, newName, newDescription)
+    }
 
+    def openWorkspace = {
+        //TODO da implementare
     }
 
     def deleteWorkspace = {
-
+        def workspaceId = model.selectedWorkspaceId
+        model.workspaceList.remove(workspaceService.getWorkspace(workspaceId))
+        workspaceService.doDelete(workspaceId)
     }
 
     def exportWorkspace = {
-
+        //TODO da implementare
     }
 
     def importWorkspace = {
-
+        //TODO da implementare
     }
 }

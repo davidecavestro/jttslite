@@ -2,11 +2,11 @@ import groovy.sql.Sql
 
 class BootstrapGsql {
 
-//    def workspaceService
+//    def service
 //    def taskService
 
     def init = { String dataSourceName = 'default', Sql sql ->
-//        workspaceService.doInsert ('prova1', 'prova uno')
+//        service.doInsert ('prova1', 'prova uno')
 //
 //        def prova1 = sql.executeInsert("INSERT INTO workspace (name, description) VALUES ('prova1','prova uno')")
 //        def prova2 = sql.executeInsert("INSERT INTO workspace (name, description) VALUES ('prova2','prova due')")
