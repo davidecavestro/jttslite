@@ -5,8 +5,6 @@
     <setting name="cmdLine" value="-Dgriffon.offline.mode=true clear-dependency-cache" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
-    <method>
-      <option name="Make" enabled="false" />
-    </method>
+    <method />
   </configuration>
 </component>

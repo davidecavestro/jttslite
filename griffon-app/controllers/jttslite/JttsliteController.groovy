@@ -1,5 +1,9 @@
 package jttslite
 
+import griffon.swing.SwingApplication
+
+import javax.swing.JFrame
+
 import griffon.transform.Threading
 
 class JttsliteController {
@@ -58,6 +62,12 @@ class JttsliteController {
     def deleteAction = {
     }
 
+    def editWorkspacesAction = {
+        withMVCGroup('workspaces') { m, v, c ->
+            c.show()
+        }
+    }
+
     def onOSXAbout = { app ->
         withMVCGroup('about') { m, v, c ->
             c.show()
@@ -110,7 +120,7 @@ class JttsliteController {
         stopTimer ()
     }
 
-    def onStartupEnd = {app->
+    def onStartupEnd = {SwingApplication app->
         /*
         eventually loads initial/default data
          */
@@ -123,6 +133,9 @@ class JttsliteController {
                 break
         }
         loadData ()
+
+        def window = app.windowManager.startingWindow
+        window.extendedState |= JFrame.MAXIMIZED_BOTH
     }
 
     def onShutdownRequested = {app->
