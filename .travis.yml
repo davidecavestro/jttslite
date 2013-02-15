@@ -3,7 +3,7 @@ language: java
 jdk:
   - oraclejdk6
 
-script: export DISPLAY=:99.0;export GRADLE_OPTS="-XX:MaxPermSize=250m -Xmx768m";./gradlew -Pargs='-Dgriffon.artifact.force.upgrade=true' --no-color --quiet clean test
+script: "export DISPLAY=:99.0;export GRADLE_OPTS='-XX:MaxPermSize=250m -Xmx768m';./gradlew -Pargs='-Dgriffon.artifact.force.upgrade=true' --no-color --quiet clean test"
 
 before_install:
   - "export DISPLAY=:99.0"
