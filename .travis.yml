@@ -2,3 +2,9 @@ language: java
 
 jdk:
   - oraclejdk6
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
+script: export DISPLAY=:99.0;export GRADLE_OPTS="-XX:MaxPermSize=250m -Xmx768m";./gradlew clean test
