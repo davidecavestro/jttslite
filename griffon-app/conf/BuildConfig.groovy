@@ -118,32 +118,32 @@ deploy {
         }
         icon {
             'default' {
-                name   = 'griffon-icon-64x64.png'
+                name   = 'jtts-icon-64x64.png'
                 width  = '64'
                 height = '64'
             }
             splash {
-                name   = 'griffon.png'
-                width  = '391'
-                height = '123'
+                name   = 'splash.png'
+                width  = '420'
+                height = '300'
             }
             selected {
-                name   = 'griffon-icon-64x64.png'
+                name   = 'jtts-icon-64x64.png'
                 width  = '64'
                 height = '64'
             }
             disabled {
-                name   = 'griffon-icon-64x64.png'
+                name   = 'jtts-icon-64x64.png'
                 width  = '64'
                 height = '64'
             }
             rollover {
-                name   = 'griffon-icon-64x64.png'
+                name   = 'jtts-icon-64x64.png'
                 width  = '64'
                 height = '64'
             }
             shortcut {
-                name   = 'griffon-icon-64x64.png'
+                name   = 'jtts-icon-64x64.png'
                 width  = '64'
                 height = '64'
             }
@@ -154,6 +154,7 @@ deploy {
 griffon.project.dependency.resolution = {
     // inherit Griffon' default dependencies
     inherits("global") {
+        excludes "groovy"    //just to avoid duplicating groovy with old version from liquibase-dsl
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {

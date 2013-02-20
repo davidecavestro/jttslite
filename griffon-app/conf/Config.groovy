@@ -40,3 +40,5 @@ i18n.basenames = ['messages']
 
 
 i18n.provider = 'i18n'
+
+//griffon.spring.bean.packages=['jttslite']

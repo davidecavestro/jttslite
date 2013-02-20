@@ -1,8 +1,11 @@
 package jttslite
 
 import groovy.sql.Sql
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 
 class WorklogService {
+    @CacheEvict(value="worklogs", allEntries=true)
     def doInsert(def taskId, def start=null, def amount=null, def comment=null) {
         def newId
         withSql { String dataSourceName, Sql sql ->
@@ -12,9 +15,11 @@ class WorklogService {
         }
         return newId
     }
+    @CacheEvict(value="worklogs", allEntries=true)
     def doStart(def taskId, def comment=null) {
         doInsert (taskId, null, null, comment)
     }
+    @CacheEvict(value="worklogs", allEntries=true)
     def doStop(def worklogId) {
         withSql { String dataSourceName, Sql sql ->
             def start = sql.firstRow('SELECT start FROM worklog WHERE id=?',[worklogId]).start
@@ -23,11 +28,15 @@ class WorklogService {
                     [amount, worklogId])
         }
     }
+
+    @Cacheable("worklogs")
     def getWorklog(def worklogId) {
         withSql { String dataSourceName, Sql sql ->
             sql.firstRow('SELECT * FROM worklog WHERE id=?',[worklogId])
         }
     }
+
+    @Cacheable("worklogs")
     def getWorklogs(def taskId) {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
@@ -37,6 +46,7 @@ class WorklogService {
         }
     }
 
+    @Cacheable("worklogs")
     def getWorkingLog(def workspaceId) {
         withSql { String dataSourceName, Sql sql ->
             sql.firstRow('SELECT worklog.id AS id, worklog.taskId AS taskId, worklog.start AS start, worklog.amount AS amount, worklog.comment AS comment FROM worklog, task WHERE worklog.amount IS NULL AND worklog.taskId=task.id AND task.workspaceId=?',[workspaceId])

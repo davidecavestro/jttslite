@@ -86,8 +86,11 @@ splitPane {
                                 Font originalFont
                                 Font boldFont
 
-                                def durationCellRenderer = new DurationTableCellRenderer (durationClosure: {
-                                    if (model.workingLog) {
+                                def durationCellRenderer = new DurationTableCellRenderer (durationClosure: { row->
+                                    def task = taskTreeTable.model.getElementAt(row)
+                                    boolean progressing = model.workingPathIds.any {task.id==it};
+
+                                    if (progressing) {
                                         return System.currentTimeMillis() - model.workingLog.start.time
                                     }
                                     0l
@@ -198,9 +201,12 @@ splitPane {
                         Font originalFont
                         Font boldFont
 
-                        worklogTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (durationClosure: {
-                            if (model.workingLog) {
-                                return System.currentTimeMillis() - model.workingLog.start.time
+                        worklogTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (durationClosure: {row->
+                            def worklog = worklogTable.model.getElementAt(row)
+                            boolean progressing = worklog.amount==null;
+
+                            if (progressing) {
+                                return System.currentTimeMillis() - worklog.start.time
                             }
                             0l
                         }, fontClosure: {JLabel res, row->

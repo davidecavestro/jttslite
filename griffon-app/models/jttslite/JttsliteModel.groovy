@@ -73,10 +73,11 @@ class JttsliteModel {
         working = workingLogId!=null
         if (working) {
             status = app.getMessage('status.working')
-            def worklog = worklogService.getWorklog(worklogId)
-            workingPathIds = taskService.getTaskPathIds(worklog.taskId)
+            workingLog = worklogService.getWorklog(worklogId)
+            workingPathIds = taskService.getTaskPathIds(workingLog.taskId)
         } else {
             workingPathIds = null
+            workingLog = null
         }
     }
 

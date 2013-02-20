@@ -17,7 +17,7 @@ buildscript {
 }
 
 ext.griffonVersion = '1.2.0'
-version = '0.1'
+version = '3.0.0'
 
 apply plugin: 'griffon'
 
@@ -28,4 +28,8 @@ repositories {
 
 dependencies {
     compile "org.codehaus.griffon:griffon-rt:$griffonVersion"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.4'
 }

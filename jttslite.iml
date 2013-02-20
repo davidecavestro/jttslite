@@ -9,14 +9,15 @@
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/conf" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/griffon-app/lifecycle" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/test/integration" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="griffon-1.2.0" level="project" />
     <orderEntry type="module-library">
       <library name="Griffon:lib">
         <CLASSES>
@@ -28,9 +29,8 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="jttslite-griffonPluginFixes" />
+    <orderEntry type="library" name="griffon-1.2.0" level="application" />
     <orderEntry type="module" module-name="jttslite-griffonPlugins" />
-    <orderEntry type="library" name="griffon-1.2.0" level="application" />
-    <orderEntry type="library" name="griffon-1.2.0" level="application" />
   </component>
 </module>
 

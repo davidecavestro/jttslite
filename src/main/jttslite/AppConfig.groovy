@@ -27,45 +27,38 @@
 
 package jttslite
 
-import javax.swing.JLabel
-import javax.swing.JTable
-import java.awt.Component
-import java.awt.Font
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.CachingConfigurer
+import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.concurrent.ConcurrentMapCache
+import org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean
+import org.springframework.cache.interceptor.DefaultKeyGenerator
+import org.springframework.cache.interceptor.KeyGenerator
+import org.springframework.cache.support.SimpleCacheManager
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 /**
- * Renders a duration value.
- *
+ * JavaConfig-style configuration for spring
  * @author Davide Cavestro
  */
-class DurationTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
+@Configuration
+@EnableCaching
+class AppConfig implements CachingConfigurer {
 
-    Closure<Long> durationClosure
-    Closure fontClosure
+    @Bean
+    CacheManager cacheManager () {
+        println "instantiating cacheManager"
+        SimpleCacheManager cacheManager = new SimpleCacheManager();
+        cacheManager.addCache(new ConcurrentMapCache("default"));
+        cacheManager.addCache(new ConcurrentMapCache("tasks"));
+        cacheManager.addCache(new ConcurrentMapCache("taskPathIds"));
+        cacheManager.addCache(new ConcurrentMapCache("workspaceTasks"));
+        return cacheManager;
+    }
 
-    public Component getTableCellRendererComponent (final JTable table, final Object value, boolean isSelected, boolean hasFocus, final int row, final int column) {
-
-        final JLabel res = (JLabel)super.getTableCellRendererComponent ( table, value, isSelected, hasFocus, row, column);
-        final Long lDuration = (Long)value;
-        Duration duration = new Duration(lDuration?lDuration:0)
-
-        if (fontClosure) {
-            fontClosure.call (res, row)
-        }
-
-        if (durationClosure) {
-            def valueToAdd = durationClosure.call(row)
-            if (valueToAdd) {
-                duration = new Duration(duration.totalMilliseconds + valueToAdd)
-            }
-        }
-
-        if (duration.getTime ()==0){
-            res.setText ("");
-        } else {
-            res.setText (DurationUtils.format (duration));
-        }
-
-        setHorizontalAlignment (TRAILING);
-        return res;
+    @Override
+    KeyGenerator keyGenerator() {
+        return new DefaultKeyGenerator ()
     }
 }

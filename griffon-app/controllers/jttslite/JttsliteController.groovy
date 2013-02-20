@@ -225,10 +225,24 @@ def whenSpringReadyEnd = {app, applicationContext->
 
     def onWorkingTic(TimerTask timerTask) {
         if (model.working) {
+            def workingLog = model.workingLog
+            def amount = System.currentTimeMillis() - workingLog.start.time
+            println "updating amounts for workingPathIds: $model.workingPathIds"
             model.workingPathIds.each {taskId->
                 def modelTask = model.taskMap[taskId]
-                modelTask.firePropertyUpdatedEvent ('localAmount', modelTask.localAmount, modelTask.localAmount)
-                modelTask.firePropertyUpdatedEvent ('globalAmount', modelTask.globalAmount, modelTask.globalAmount)
+                println "updating amounts for task id: $taskId"
+                def localAmount = modelTask.localAmount
+                if (localAmount==null && workingLog.taskId==taskId) {//the working log is on the task
+                    localAmount = 0
+                }
+                def globalAmount = modelTask.globalAmount
+                if (globalAmount==null) {
+                    globalAmount = 0
+                }
+                if (localAmount!=null) {
+                    modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
+                }
+                modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
             }
 
             //view.systemTray.trayIcons[0].toolTip = "Pracujesz już ${HourMin.since model.startedWorkingAt}".toString()
@@ -238,7 +252,7 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
-    Timer timer = new Timer()
+    Timer timer
     def startTimer () {
         timer = new Timer()
         updateRunningTicTask = new TimerTask() {
@@ -250,7 +264,7 @@ def whenSpringReadyEnd = {app, applicationContext->
         timer.schedule (updateRunningTicTask, 0l, 1000l)
     }
     def stopTimer () {
-        updateRunningTicTask.cancel ()
-        timer.purge()
+        updateRunningTicTask?.cancel ()
+        timer?.purge()
     }
 }
