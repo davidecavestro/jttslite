@@ -52,10 +52,6 @@ class TaskService {
      * @param description the task description
      * @return the new task id
      */
-    @Caching(evict={
-        @CacheEvict(value="tasks", allEntries=true),
-        @CacheEvict(value="workspaceTasks", allEntries=true)
-    })
     def doInsert(def workspaceId, def parentId, def title=null, def description=null) {
         if (workspaceId==null) {
             withSql { String dataSourceName, Sql sql ->
@@ -93,7 +89,6 @@ class TaskService {
         return newId
     }
 
-    @Caching(evict = { @CacheEvict(value="tasks", allEntries=true) @CacheEvict(value = "workspaceTasks", allEntries=true) })
     public void doUpdate(def id, def title, def description) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE task SET title=?, description=? WHERE id=?',
@@ -101,7 +96,6 @@ class TaskService {
         }
     }
 
-    @Caching(evict = { @CacheEvict(value="tasks", allEntries=true) @CacheEvict(value = "workspaceTasks", allEntries=true) })
     public void doRename(def id, def title) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE task SET title=? WHERE id=?',
@@ -109,7 +103,6 @@ class TaskService {
         }
     }
 
-    @Caching(evict = { @CacheEvict(value="tasks", allEntries=true) @CacheEvict(value = "workspaceTasks", allEntries=true) })
     public void doMove(def id, def parentId, def siblingIndex) {
         def task = getTask (id)
         assert task.parentId!=null, "Cannot move workspace root"
@@ -133,7 +126,6 @@ class TaskService {
         }
     }
 
-    @Caching(evict = { @CacheEvict(value="tasks", allEntries=true) @CacheEvict(value = "workspaceTasks", allEntries=true) })
     public int doDelete(def id) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('DELETE FROM task WHERE id=?',
