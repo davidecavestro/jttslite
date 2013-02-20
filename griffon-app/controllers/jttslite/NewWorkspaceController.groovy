@@ -66,4 +66,8 @@ class NewWorkspaceController {
         app.windowManager.hide(dialog)
         dialog = null
     }
+
+    def okAction = {
+
+    }
 }

@@ -28,9 +28,6 @@ panel(id: 'content') {
     label(text:"Description", constraints: 'gap para')
     textArea(constraints: 'growx, wrap')
 
-    label(text:"Open automatically", constraints: 'gap para')
-    checkBox(constraints: 'growx, wrap')
-
     button(okAction, constraints: 'right')
     button(hideAction, constraints: 'right')
 

@@ -20,6 +20,9 @@ class JttsliteController {
     }
 
     def openAction = {
+        withMVCGroup('openWorkspace') { m, v, c ->
+            c.show()
+        }
     }
 
     def saveAction = {
@@ -64,6 +67,12 @@ class JttsliteController {
 
     def editWorkspacesAction = {
         withMVCGroup('workspaces') { m, v, c ->
+            c.show()
+        }
+    }
+
+    def taskPropertiesAction = {
+        withMVCGroup('taskProperties') { m, v, c ->
             c.show()
         }
     }

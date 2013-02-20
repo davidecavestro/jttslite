@@ -57,4 +57,18 @@ mvcGroups {
         view       = 'jttslite.NewWorkspaceView'
         controller = 'jttslite.NewWorkspaceController'
     }
+
+    // MVC Group for "Open workspace"
+    'openWorkspace' {
+        model      = 'jttslite.WorkspacesModel'
+        view       = 'jttslite.OpenWorkspaceView'
+        controller = 'jttslite.WorkspacesController'
+    }
+
+    // MVC Group for "Task properties"
+    'taskProperties' {
+        model      = 'jttslite.TaskPropertiesModel'
+        view       = 'jttslite.TaskPropertiesView'
+        controller = 'jttslite.TaskPropertiesController'
+    }
 }

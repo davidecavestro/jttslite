@@ -1,18 +1,16 @@
+
 package jttslite
 
-import ca.odell.glazedlists.*
-import ca.odell.glazedlists.swing.GlazedListsSwing
-
-class NewWorkspaceModel extends AbstractDialogModel {
+class TaskPropertiesModel extends AbstractDialogModel {
 
     @Override
     protected String getDialogKey() {
-        return "NewWorkspace"
+        return "TaskProperties"
     }
 
     @Override
     protected String getDialogTitle() {
-        return "NewWorkspace"
+        return "TaskProperties"
     }
 
     void mvcGroupInit(Map<String, Object> args) {

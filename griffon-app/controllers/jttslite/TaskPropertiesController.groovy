@@ -4,11 +4,8 @@ import griffon.transform.Threading
 
 import java.awt.*
 
-class WorkspacesController {
-
-    WorkspacesModel model
-    WorkspaceService workspaceService
-
+class TaskPropertiesController {
+    def model
     def view
     def builder
 
@@ -43,32 +40,7 @@ class WorkspacesController {
         dialog = null
     }
 
-    @Threading(Threading.Policy.INSIDE_UITHREAD_SYNC)
-    def createWorkspace = {
-        withMVCGroup('newWorkspace') { m, v, c ->
-            c.show()
-        }
-    }
+    def okAction = {
 
-    def updateWorkspace(def workspaceId, def newName, def newDescription) {
-        workspaceService.doUpdate(workspaceId, newName, newDescription)
-    }
-
-    def openWorkspace = {
-        //TODO da implementare
-    }
-
-    def deleteWorkspace = {
-        def workspaceId = model.selectedWorkspaceId
-        model.workspaceList.remove(workspaceService.getWorkspace(workspaceId))
-        workspaceService.doDelete(workspaceId)
-    }
-
-    def exportWorkspace = {
-        //TODO da implementare
-    }
-
-    def importWorkspace = {
-        //TODO da implementare
     }
 }
