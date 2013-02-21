@@ -7,4 +7,4 @@ script: ./gradlew -Pargs='-Dgriffon.artifact.force.upgrade=true' --no-color --qu
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-install: /bin/true
+install: /bin/true;./gradlew -Pargs='-Dgriffon.artifact.force.upgrade=true' clean
