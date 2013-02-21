@@ -83,10 +83,21 @@ splitPane {
                             treeTableSupport.showExpanderForEmptyParent = true
 
                             noparent {
-                                Font originalFont
-                                Font boldFont
+                                Font localAmountOriginalFont
+                                Font globalAmountOriginalFont
+                                Font localAmountBoldFont
+                                Font globalAmountBoldFont
 
-                                def durationCellRenderer = new DurationTableCellRenderer (durationClosure: { row->
+                                def localDurationClosure = { row->
+                                    def task = taskTreeTable.model.getElementAt(row)
+                                    boolean progressing = model.workingLog?.taskId == task.id
+
+                                    if (progressing) {
+                                        return System.currentTimeMillis() - model.workingLog.start.time
+                                    }
+                                    null
+                                }
+                                def globalDurationClosure = { row->
                                     def task = taskTreeTable.model.getElementAt(row)
                                     boolean progressing = model.workingPathIds.any {task.id==it};
 
@@ -94,28 +105,49 @@ splitPane {
                                         return System.currentTimeMillis() - model.workingLog.start.time
                                     }
                                     0l
-                                }, fontClosure: {JLabel res, row->
+                                }
+
+                                def localAmountFontClosure = {JLabel res, row->
+
+                                    def task = taskTreeTable.model.getElementAt(row)
+                                    boolean progressing = model.workingLog?.taskId == task.id
+
+
+                                    if (progressing) {
+                                        if (null==localAmountBoldFont) {
+                                            localAmountBoldFont = res.getFont ().deriveFont (Font.BOLD)
+                                        }
+
+                                        res.setFont (localAmountBoldFont)
+                                    } else {
+                                        if (null==localAmountOriginalFont) {
+                                            localAmountOriginalFont = res.getFont ().deriveFont (Font.PLAIN)
+                                        }
+                                        res.setFont (localAmountOriginalFont)
+                                    }
+                                }
+
+                                def globalAmountFontClosure = {JLabel res, row->
 
                                     def task = taskTreeTable.model.getElementAt(row)
                                     boolean progressing = model.workingPathIds.any {task.id==it};
 
                                     if (progressing) {
-                                        if (null==originalFont) {
-                                            originalFont = res.getFont ();
-                                        }
-                                        if (null==boldFont) {
-                                            boldFont = originalFont.deriveFont (Font.BOLD);
+                                        if (null==globalAmountBoldFont) {
+                                            globalAmountBoldFont = res.getFont ().deriveFont (Font.BOLD)
                                         }
 
-                                        res.setFont (boldFont);
+                                        res.setFont (globalAmountBoldFont)
                                     } else {
-                                        res.setFont (originalFont);
+                                        if (null==globalAmountOriginalFont) {
+                                            globalAmountOriginalFont = res.getFont ().deriveFont (Font.PLAIN)
+                                        }
+                                        res.setFont (globalAmountOriginalFont)
                                     }
+                                }
 
-
-                                })
-                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(durationCellRenderer)
-                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(durationCellRenderer)
+                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (durationClosure:localDurationClosure, fontClosure: localAmountFontClosure))
+                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer (durationClosure:globalDurationClosure, fontClosure: globalAmountFontClosure))
 
                                 taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                                     if ( !evt.isAdjusting) {
