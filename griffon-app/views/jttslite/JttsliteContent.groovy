@@ -1,5 +1,6 @@
 package jttslite
 
+import ca.odell.glazedlists.event.ListEventListener
 import ca.odell.glazedlists.swing.TreeTableSupport
 import net.miginfocom.swing.MigLayout
 import org.jfree.chart.ChartPanel
@@ -159,6 +160,7 @@ splitPane {
                                             def task = taskTreeTable.model.getElementAt (selectionIndex)
                                             //controller.selectedTaskChanged (task.id)
                                             model.selectedTaskId = task.id
+                                            model.selectedTaskIndex = selectionIndex
                                             //... do stuff with the selected index ...
                                         } else {
                                             model.selectedTaskId = null
@@ -166,6 +168,14 @@ splitPane {
                                         }
                                     }
                                 }] as ListSelectionListener)
+
+                                model.taskTreeList.addListEventListener ({
+                                    edt{
+                                        if (model.selectedTaskIndex) {
+                                            taskTreeTable.selectionModel.setSelectionInterval(model.selectedTaskIndex, model.selectedTaskIndex)
+                                        }
+                                    }
+                                } as ListEventListener)
                             }
 //                            noparent {
 //                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
