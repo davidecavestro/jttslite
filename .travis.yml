@@ -2,9 +2,9 @@ language: java
 jdk:
   - oraclejdk6
 env: DISPLAY=:99.0
-env: GRADLE_OPTS="-XX:MaxPermSize=250m -Xmx768m"
-script: ./griffonw -non-interactive -Dgriffon.artifact.force.upgrade=true clean test
+env: GRIFFON_OPTS="-XX:MaxPermSize=250m -Xmx768m"
+script: griffon -non-interactive -Dgriffon.artifact.force.upgrade=true clean test
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-install: /bin/true
+install: gvm install griffon 1.2.0
