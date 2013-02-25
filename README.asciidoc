@@ -1,5 +1,5 @@
-JTTSlite image:https://buildhive.cloudbees.com/job/davidecavestro/job/jttslite/badge/icon["Build Status", link="https://buildhive.cloudbees.com/job/davidecavestro/job/jttslite/"] image:https://travis-ci.org/davidecavestro/jttslite.png?branch=master["Build Status", link="https://travis-ci.org/davidecavestro/jttslite"]
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JTTSlite image:https://travis-ci.org/davidecavestro/jttslite.png?branch=master["Build Status", link="https://travis-ci.org/davidecavestro/jttslite"]
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 JTTS lite is a desktop time tracking application.
 It helps you to trace your daily tasks. It can also generate reports, import and export data.
