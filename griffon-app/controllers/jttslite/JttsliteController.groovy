@@ -249,7 +249,7 @@ def whenSpringReadyEnd = {app, applicationContext->
                     globalAmount = 0
                 }
                 if (localAmount!=null) {
-                    //modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
+                    modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
                 }
                 modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
             }

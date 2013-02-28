@@ -154,7 +154,7 @@ deploy {
 griffon.project.dependency.resolution = {
     // inherit Griffon' default dependencies
     inherits("global") {
-        excludes "groovy"    //just to avoid duplicating groovy with old version from liquibase-dsl
+        excludes "groovy", "glazedlists_java15"    //just to avoid duplicating groovy with old version from liquibase-dsl
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
@@ -164,6 +164,7 @@ griffon.project.dependency.resolution = {
         // from public Maven repositories
         mavenLocal()
         mavenCentral()
+        flatDir name:'myRepo', dirs:'lib'
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -174,6 +175,7 @@ griffon.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
         //compile 'joda-time:joda-time:2.1'
+        compile 'net.java.dev.glazedlists:glazedlists_java15:1.9.0'
     }
 }
 

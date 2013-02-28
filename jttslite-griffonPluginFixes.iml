@@ -4,7 +4,6 @@
     <exclude-output />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0" level="project" />
     <orderEntry type="module-library" exported="">
       <library name="Griffon:lib-fixes (jttslite-griffonPluginFixes)">
         <CLASSES>
@@ -88,7 +87,6 @@
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jbusycomponent-1.0.0/dist/griffon-jbusycomponent-1.0.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/dist/griffon-oxbow-1.0.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/gsql-1.1.1/docs/griffon-gsql-runtime-1.1.1-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/tray-builder-0.8/dist/griffon-tray-builder-0.8-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/dist/griffon-charts-1.0.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/glazedlists-1.1.0/dist/griffon-glazedlists-1.1.0-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swing-1.2.0/docs/griffon-swing-runtime-1.2.0-javadoc.jar!/" />
@@ -105,7 +103,6 @@
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/dist/griffon-oxbow-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/miglayout-1.0.0/dist/griffon-miglayout-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/gsql-1.1.1/docs/griffon-gsql-runtime-1.1.1-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/tray-builder-0.8/dist/griffon-tray-builder-0.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/dist/griffon-charts-1.0.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/glazedlists-1.1.0/dist/griffon-glazedlists-1.1.0-sources.jar!/" />
           <root url="jar://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/liquibase-0.1/docs/griffon-liquibase-runtime-0.1-sources.jar!/" />

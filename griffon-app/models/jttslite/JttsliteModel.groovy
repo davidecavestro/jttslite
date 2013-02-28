@@ -10,7 +10,6 @@ class JttsliteModel {
     @Bindable boolean working
     @Bindable String status
     @Bindable Long selectedTaskId
-    @Bindable Integer selectedTaskIndex    //index of the selected task, it's used in order to workaround http://java.net/jira/browse/GLAZEDLISTS-462
     @Bindable Long workingLogId
     @Bindable Long workspaceId
 

@@ -17,14 +17,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="griffon-1.2.0" level="project" />
     <orderEntry type="module-library">
       <library name="Griffon:lib">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/glazedlists_java15-1.9.0-sources.jar!/" />
+        </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
