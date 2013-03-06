@@ -20,7 +20,7 @@ options = [true, true, true]
 chart = ChartFactory.createPieChart("",piedataset, *options)
 chart.backgroundPaint = Color.white
 
-application(title: GriffonNameUtils.capitalize(app.getMessage('application.title', app.config.application.title)),
+application(id: 'mainWindow', title: GriffonNameUtils.capitalize(app.getMessage('application.title', app.config.application.title)),
         pack: true,
         locationByPlatform: true,
         iconImage: imageIcon('/jtts-icon-48x48.png').image,

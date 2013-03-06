@@ -26,7 +26,6 @@
  */
 
 databaseChangeLog() {
-    //include(path: '20130108-initial-schema.groovy', relativeToChangelog: false)
     changeSet(id:'initial-schema', author: 'davidecavestro') {
         sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
             """
@@ -129,6 +128,7 @@ FROM worklog
 """
         }
     }
+    include(file: 'migrations/20130301-add-delete-fields.groovy', relativeToChangelog: false)
 
 
 }

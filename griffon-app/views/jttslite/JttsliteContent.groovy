@@ -1,8 +1,10 @@
 package jttslite
 
 import ca.odell.glazedlists.event.ListEventListener
+import ca.odell.glazedlists.swing.JXTableSupport
 import ca.odell.glazedlists.swing.TreeTableSupport
 import net.miginfocom.swing.MigLayout
+import org.jdesktop.swingx.JXTable
 import org.jfree.chart.ChartPanel
 
 import javax.swing.*
@@ -61,14 +63,18 @@ splitPane {
                         selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)//see https://sites.google.com/site/glazedlists/documentation/faq#TOC-JLists-JTables
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
-                    def taskTreeTable = new JTable() {
+                    JXTable taskTreeTable = new JXTable() {
                         Component prepareRenderer() {
                             super.prepareRenderer ()
                         }
                     }
-
+                    taskTreeTable.setSortable(false);
+                    taskTreeTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
+                    taskTreeTable.setAutoCreateRowSorter(false);
+                    taskTreeTable.setRowSorter(null);
+                    taskTreeTable.columnControlVisible = true
                     scrollPane {
-                        table(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
+                        jxtable(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
                             tableFormat = defaultWritableTableFormat(columns: [
                                     [name: 'title', title: 'Name', write: {baseObject, columnNames, index, editedValue->
                                         //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
@@ -203,12 +209,17 @@ splitPane {
                         selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.swingProxyWorklogList)
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
-                    def worklogTable = new JTable() {
+                    JXTable worklogTable = new JXTable() {
                         Component prepareRenderer() {
                             super.prepareRenderer ()
                         }
                     }
-                    table(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
+                    worklogTable.setSortable(false);
+                    worklogTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
+                    worklogTable.setAutoCreateRowSorter(false);
+                    worklogTable.setRowSorter(null);
+                    worklogTable.columnControlVisible = true
+                    jxtable(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
                         tableFormat = defaultAdvancedTableFormat(columns: [
                                 [name: 'start',     title: 'Start'],
                                 [name: 'amount',     title: 'Duration'],

@@ -254,6 +254,9 @@ def whenSpringReadyEnd = {app, applicationContext->
                 modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
             }
 
+            def modelWorklog = model.worklogMap[workingLog.id]
+            modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
+
             //view.systemTray.trayIcons[0].toolTip = "Pracujesz już ${HourMin.since model.startedWorkingAt}".toString()
         } else {
             timerTask.cancel()
