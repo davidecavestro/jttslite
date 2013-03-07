@@ -38,7 +38,7 @@ actions {
 
 systemTray {
     trayIcon(id: "trayIcon",
-            resource: "/fatcow/16x16/clock.png",
+            resource: "/jtts-icon-48x48.png",
             class: FatcowIconFactory,
             toolTip: "...",
             actionPerformed: {

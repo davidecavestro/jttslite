@@ -1,6 +1,8 @@
 package jttslite
 
 import griffon.swing.SwingApplication
+import groovy.time.TimeCategory
+import groovy.time.TimeDuration
 
 import javax.swing.JFrame
 
@@ -120,16 +122,27 @@ class JttsliteController {
         model.workingLogId = worklogService.doStart(model.selectedTaskId)
         startTimer ()
 
+        //add the new worklog
         model.worklogList.add (worklogService.getWorklog(model.workingLogId) as ObservableMap)
+        view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.Running', "Running")
     }
     def onStopProgress = { evt = null ->
-        worklogService.doStop(model.workingLogId)
-        model.worklogMap[model.workingLogId] = worklogService.getWorklog(model.workingLogId) as ObservableMap
+        def workingLogId = model.workingLogId
+
+        worklogService.doStop(workingLogId)
+        //refresh the stopped worklog
+        model.worklogMap[workingLogId] = worklogService.getWorklog(workingLogId) as ObservableMap
         model.workingLogId = null
         stopTimer ()
+        //refresh tasks above the stopped worklog
+        taskService.getTaskPathIds().each {taskId->
+            model.taskMap[taskId] = taskService.getTask(taskId) as ObservableMap
+        }
+        view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.Idle', "Idle")
     }
 
     def onStartupEnd = {SwingApplication app->
+        griffon.plugins.splash.SplashScreen.instance.showStatus(app.getMessage ('application.splash.ConfiguringEnvironment', "Configuring environment"))
         /*
         eventually loads initial/default data
          */
@@ -232,7 +245,7 @@ def whenSpringReadyEnd = {app, applicationContext->
 
     TimerTask updateRunningTicTask
 
-    def onWorkingTic(TimerTask timerTask) {
+    def onWorkingTic(TicTimerTask timerTask) {
         if (model.working) {
             def workingLog = model.workingLog
             def amount = System.currentTimeMillis() - workingLog.start.time
@@ -256,27 +269,28 @@ def whenSpringReadyEnd = {app, applicationContext->
 
             def modelWorklog = model.worklogMap[workingLog.id]
             modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
-
-            //view.systemTray.trayIcons[0].toolTip = "Pracujesz już ${HourMin.since model.startedWorkingAt}".toString()
+            def runningDuration = DurationUtils.formatDuration(amount)
+            view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.RunningWithAmount', [runningDuration], "Running ($runningDuration)".toString())
         } else {
             timerTask.cancel()
-            //view.systemTray.trayIcons[0].toolTip = = "Obecnie nie pracujesz."
         }
     }
 
     Timer timer
     def startTimer () {
         timer = new Timer()
-        updateRunningTicTask = new TimerTask() {
-            @Override
-            void run() {
-                onWorkingTic (this)
-            }
-        }
+        updateRunningTicTask = new TicTimerTask()
         timer.schedule (updateRunningTicTask, 0l, 1000l)
     }
     def stopTimer () {
         updateRunningTicTask?.cancel ()
         timer?.purge()
+    }
+
+    class TicTimerTask extends TimerTask {
+        @Override
+        void run() {
+            onWorkingTic (this)
+        }
     }
 }
