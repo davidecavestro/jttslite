@@ -128,7 +128,7 @@ class TaskService {
         def newParent = getTask(parentId)
         //shift right new siblings
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('UPDATE task SET siblingIndex=siblingIndex+1, treeCode=?+'.'+(siblingIndex+1) WHERE parentId=? AND siblingIndex>=?',
+            sql.executeUpdate('UPDATE task SET siblingIndex=siblingIndex+1, treeCode=?+'.'+(siblingIndex+1) WHERE parentId=? AND siblingIndex>=? AND deleted<>TRUE',
                     [newParent.treeCode, parentId, siblingIndex]) != null
         }
         withSql { String dataSourceName, Sql sql ->
@@ -137,7 +137,7 @@ class TaskService {
         }
         //shift left old siblings
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('UPDATE task SET siblingIndex=siblingIndex-1, treeCode=?+'.'+(siblingIndex-1) WHERE parentId=? AND siblingIndex>?',
+            sql.executeUpdate('UPDATE task SET siblingIndex=siblingIndex-1, treeCode=?+'.'+(siblingIndex-1) WHERE parentId=? AND siblingIndex>? AND deleted<>TRUE',
                     [oldParent.treeCode, oldParent.id, task.siblingIndex]) != null
         }
     }
@@ -148,7 +148,7 @@ class TaskService {
     ])
     public int doDelete(def id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('DELETE FROM task WHERE id=?',
+            sql.executeUpdate('UPDATE task SET deleted=TRUE WHERE id=?',
                     [id])
         }
     }
@@ -161,7 +161,7 @@ class TaskService {
     @Cacheable("workspaceTasks")
     def getTasks(def workspaceId) {
         withSql { String dataSourceName, Sql sql ->
-            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=?',[workspaceId])
+            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=? AND deleted<>TRUE',[workspaceId])
         }
     }
 

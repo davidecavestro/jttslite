@@ -25,7 +25,7 @@ class WorkspaceService {
     }
     public int doDelete(def id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('DELETE FROM workspace WHERE id=?',
+            sql.executeUpdate('UPDATE workspace SET deleted=TRUE WHERE id=?',
                     [id])
         }
     }
@@ -37,7 +37,7 @@ class WorkspaceService {
     def getWorkspaces() {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
-            sql.eachRow('SELECT * FROM workspace', {
+            sql.eachRow('SELECT * FROM workspace WHERE deleted=FALSE', {
                     result<<[id:it.id, name:it.name, description:it.description]
                 }
             )
@@ -51,7 +51,9 @@ class WorkspaceService {
 
     int workspacesCount() {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT COUNT(*) AS wsnum FROM workspace').wsnum
+            def result
+            result = sql.firstRow('SELECT COUNT(*) AS wsnum FROM workspace WHERE deleted<>TRUE').wsnum
+            return result
         }
     }
 }

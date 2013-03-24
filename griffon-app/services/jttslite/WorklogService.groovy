@@ -3,6 +3,7 @@ package jttslite
 import groovy.sql.Sql
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.annotation.Caching
 
 class WorklogService {
     @CacheEvict(value="worklogs", allEntries=true)
@@ -29,10 +30,18 @@ class WorklogService {
         }
     }
 
+    @CacheEvict(value="worklogs", allEntries=true)
+    public int doDelete(def id) {
+        withSql { String dataSourceName, Sql sql ->
+            sql.executeUpdate('UPDATE worklog SET deleted=TRUE WHERE id=?',
+                    [id])
+        }
+    }
+
     @Cacheable("worklogs")
     def getWorklog(def worklogId) {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT * FROM worklog WHERE id=?',[worklogId])
+            sql.firstRow('SELECT * FROM worklog WHERE id=? AND deleted=FALSE',[worklogId])
         }
     }
 
@@ -40,7 +49,7 @@ class WorklogService {
     def getWorklogs(def taskId) {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
-            sql.eachRow('SELECT * FROM worklog WHERE taskId=?',
+            sql.eachRow('SELECT * FROM worklog WHERE taskId=? AND deleted<>TRUE',
                     [taskId], {result<<[id:it.id, taskId:it.taskId, start:it.start, amount:it.amount, comment:it.comment]})
             return result
         }

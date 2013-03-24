@@ -129,6 +129,7 @@ FROM worklog
         }
     }
     include(file: 'migrations/20130301-add-delete-fields.groovy', relativeToChangelog: false)
+    include(file: 'migrations/20130324-complete-delete-fields.groovy', relativeToChangelog: false)
 
 
 }
