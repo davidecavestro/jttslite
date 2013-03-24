@@ -1,16 +1,13 @@
 package jttslite
 
-import ca.odell.glazedlists.event.ListEventListener
-import ca.odell.glazedlists.swing.JXTableSupport
+import ca.odell.glazedlists.EventList
 import ca.odell.glazedlists.swing.TreeTableSupport
 import net.miginfocom.swing.MigLayout
-import org.jdesktop.swingx.JXTable
 import org.jfree.chart.ChartPanel
 
 import javax.swing.*
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
-import javax.swing.table.JTableHeader
 import java.awt.*
 
 //panel {
@@ -64,18 +61,20 @@ splitPane {
                         selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)//see https://sites.google.com/site/glazedlists/documentation/faq#TOC-JLists-JTables
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
-                    JXTable taskTreeTable = new JXTable() {
+                    JTable taskTreeTable = new JTable() {
                         Component prepareRenderer() {
                             super.prepareRenderer ()
                         }
                     }
+                    /*
                     taskTreeTable.setSortable(false);
                     taskTreeTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
                     taskTreeTable.setAutoCreateRowSorter(false);
                     taskTreeTable.setRowSorter(null);
                     taskTreeTable.columnControlVisible = true
+                    */
                     scrollPane {
-                        jxtable(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
+                        table(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
                             tableFormat = defaultWritableTableFormat(columns: [
                                     [name: 'title', title: 'Name', write: {baseObject, columnNames, index, editedValue->
                                         //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
@@ -160,18 +159,17 @@ splitPane {
                                 taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                                     if ( !evt.isAdjusting) {
 
+                                        def selectedTaskId = null
                                         def selectionIndex = evt.source.leadSelectionIndex
-
-
                                         if (selectionIndex!=null && selectionIndex>=0) {
-                                            def task = taskTreeTable.model.getElementAt (selectionIndex)
-                                            //controller.selectedTaskChanged (task.id)
-                                            model.selectedTaskId = task.id
-                                            //... do stuff with the selected index ...
+                                            //cambio di selezione
+                                            EventList selected = taskTreeTable.selectionModel.getSelected()
+                                            def task = selected.get(0)
+                                            selectedTaskId = task.id
                                         } else {
-                                            model.selectedTaskId = null
-                                            //controller.selectedTaskChanged (null)
+                                            selectedTaskId = null
                                         }
+                                        model.selectedTaskId = selectedTaskId
                                     }
                                 }] as ListSelectionListener)
                             }
@@ -210,17 +208,19 @@ splitPane {
                         selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.swingProxyWorklogList)
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
-                    JXTable worklogTable = new JXTable() {
+                    JTable worklogTable = new JTable() {
                         Component prepareRenderer() {
                             super.prepareRenderer ()
                         }
                     }
+                    /*
                     worklogTable.setSortable(false);
                     worklogTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
                     worklogTable.setAutoCreateRowSorter(false);
                     worklogTable.setRowSorter(null);
                     worklogTable.columnControlVisible = true
-                    jxtable(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
+                    */
+                    table(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
                         tableFormat = defaultAdvancedTableFormat(columns: [
                                 [name: 'start',     title: 'Start'],
                                 [name: 'amount',     title: 'Duration'],
