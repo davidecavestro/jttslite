@@ -4,6 +4,25 @@ import griffon.plugins.fatcow.FatcowIconFactory
 
 import javax.swing.KeyStroke
 
+def deleteAction = new ProxyingSwingAction ()
+app.addApplicationEventListener([
+        TreeGainedFocus: {a->
+//            deleteProxyingAction.wrap (treeDeleteAction)
+            deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteTaskAction'))
+        },
+        TreeLostFocus: {a->
+            deleteAction.wrap (null)
+        },
+        TableGainedFocus: {a->
+            deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteWorklogAction'))
+        },
+        TableLostFocus: {a->
+            deleteAction.wrap (null)
+        },
+        DeleteTriggered: {a->
+            deleteAction.actionPerformed ()
+        }
+])
 actions {
     action(saveAction, enabled: false)
     action(saveAsAction, enabled: false)
@@ -12,9 +31,20 @@ actions {
     action(cutAction, enabled: false)
     action(copyAction, enabled: false)
     action(pasteAction, enabled: false)
-    action(deleteAction,
+    action('deleteAction' ,
             accelerator: KeyStroke.getKeyStroke(app.getMessage('application.action.Delete.accelerator', 'meta DELETE')),
             enabled: false
+    )//{deleteAction}
+
+    action(
+            id: "deleteTaskAction",
+            name: "Delete tasks",
+            enabled: bind {model.treeSelection}
+    )
+    action(
+            id: "deleteWorklogAction",
+            name: "Delete worklogs",
+            enabled: bind {model.tableSelection}
     )
 
     action(

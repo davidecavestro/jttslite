@@ -10,6 +10,8 @@ class JttsliteModel {
     @Bindable boolean working
     @Bindable String status
     @Bindable Long selectedTaskId
+    @Bindable EventList selectedTasks
+    @Bindable EventList selectedWorklogs
     @Bindable Long workingLogId
     @Bindable Long workspaceId
 
@@ -57,12 +59,12 @@ class JttsliteModel {
 
     public void setSelectedTaskId (Long taskId) {
         selectedTaskId = taskId
-        worklogList.clear()
+        worklogList.clear()//clear previous worklog list
         if (taskId!=null) {
             execOutsideUI {
                 def newData = worklogService.getWorklogs(taskId).collect {it as ObservableMap}
                 execInsideUIAsync {
-                    worklogList.addAll(newData)
+                    worklogList.addAll(newData)//show  worklogs for current selection
                 }
             }
         }

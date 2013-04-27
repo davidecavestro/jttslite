@@ -31,10 +31,10 @@ class WorklogService {
     }
 
     @CacheEvict(value="worklogs", allEntries=true)
-    public int doDelete(def id) {
+    public int doDelete(def ids) {
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('UPDATE worklog SET deleted=TRUE WHERE id=?',
-                    [id])
+            sql.executeUpdate('UPDATE worklog SET deleted=TRUE WHERE id IN (?)',
+                    [ids.join (',')])
         }
     }
 

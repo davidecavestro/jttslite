@@ -9,6 +9,8 @@ import javax.swing.*
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
 import java.awt.*
+import java.awt.event.FocusEvent
+import java.awt.event.FocusListener
 
 //panel {
 //    migLayout layoutConstraints: 'fill'
@@ -34,7 +36,7 @@ import java.awt.*
 /* -------------------- LAYOUT ---------------------- */
 /* -------------------------------------------------- */
 
-
+GriffonApplication application = app
 
 splitPane {
     splitPane(id:'mainPanel',orientation:JSplitPane.VERTICAL_SPLIT){
@@ -159,11 +161,11 @@ splitPane {
                                 taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                                     if ( !evt.isAdjusting) {
 
+                                        model.selectedTasks = taskTreeTable.selectionModel.getSelected()
+
                                         def selectedTaskId = null
-                                        def selectionIndex = evt.source.leadSelectionIndex
-                                        if (selectionIndex!=null && selectionIndex>=0) {
-                                            //cambio di selezione
-                                            EventList selected = taskTreeTable.selectionModel.getSelected()
+                                        EventList selected = taskTreeTable.selectionModel.getSelected()
+                                        if (!selected.isEmpty()) {
                                             def task = selected.get(0)
                                             selectedTaskId = task.id
                                         } else {
@@ -172,6 +174,18 @@ splitPane {
                                         model.selectedTaskId = selectedTaskId
                                     }
                                 }] as ListSelectionListener)
+                                taskTreeTable.addFocusListener(new FocusListener() {
+                                    @Override
+                                    void focusGained(FocusEvent e) {
+                                        //synch focus-related actions
+                                        application.event('TreeGainedFocus')
+                                    }
+
+                                    @Override
+                                    void focusLost(FocusEvent e) {
+                                        application.event('TreeLostFocus')
+                                    }
+                                })
                             }
 //                            noparent {
 //                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
@@ -232,6 +246,8 @@ splitPane {
 
                                 def selectionIndex = evt.source.leadSelectionIndex
 
+                                model.selectedWorklogs = worklogTable.selectionModel.getSelected()
+
                                 if (selectionIndex!=null && selectionIndex>=0) {
                                     //... do stuff with the selected index ...
                                 } else {
@@ -275,6 +291,18 @@ splitPane {
                         }
                         ))
                     }
+                    worklogTable.addFocusListener(new FocusListener() {
+                        @Override
+                        void focusGained(FocusEvent e) {
+                            //synch focus-related actions
+                            application.event('TableGainedFocus')
+                        }
+
+                        @Override
+                        void focusLost(FocusEvent e) {
+                            application.event('TableLostFocus')
+                        }
+                    })
 
                 }
             }

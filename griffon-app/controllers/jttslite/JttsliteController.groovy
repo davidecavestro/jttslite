@@ -65,6 +65,21 @@ class JttsliteController {
     }
 
     def deleteAction = {
+        app.event('deleteTriggered')
+    }
+
+    def deleteTaskAction = {
+        List toDelete = new ArrayList (model.selectedTasks)
+        taskService.doDelete(toDelete.collect {it.id})
+        //remove items from model
+        model.taskList.removeAll(toDelete)
+    }
+
+    def deleteWorklogAction = {
+        List toDelete = new ArrayList (model.selectedWorklogs)
+        worklogService.doDelete(toDelete.collect {it.id})
+        //remove items from model
+        model.worklogList.removeAll(toDelete)
     }
 
     def editWorkspacesAction = {

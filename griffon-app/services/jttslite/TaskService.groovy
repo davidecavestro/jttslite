@@ -146,10 +146,10 @@ class TaskService {
     @CacheEvict(value="tasks", allEntries=true),
     @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    public int doDelete(def id) {
+    public int doDelete(def ids) {
         withSql { String dataSourceName, Sql sql ->
-            sql.executeUpdate('UPDATE task SET deleted=TRUE WHERE id=?',
-                    [id])
+            sql.executeUpdate('UPDATE task SET deleted=TRUE WHERE id IN (?)',
+                    [ids.join (',')])
         }
     }
     @Cacheable("tasks")
