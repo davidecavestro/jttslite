@@ -33,12 +33,10 @@ import groovy.sql.Sql
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
+import org.springframework.util.LinkedCaseInsensitiveMap
 
 /**
- * Business logic for tasks.
- * <p>
- * A task is a model object.
- * </p>
+ * Business logic for {@link TaskBean tasks}.
  *
  * @author Davide Cavestro
  */
@@ -56,7 +54,7 @@ class TaskService {
         @CacheEvict(value="tasks", allEntries=true),
         @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    def doInsert(def workspaceId, def parentId, def title=null, def description=null) {
+    public long doInsert(long workspaceId, Long parentId, String title=null, String description=null) {
         if (workspaceId==null) {
             withSql { String dataSourceName, Sql sql ->
                 workspaceId = sql.firstRow('SELECT * FROM task WHERE id=?', [parentId]).workspaceId
@@ -97,7 +95,7 @@ class TaskService {
     @CacheEvict(value="tasks", allEntries=true),
     @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    public void doUpdate(def id, def title, def description) {
+    public void doUpdate(long id, String title, String description) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE task SET title=?, description=? WHERE id=?',
                     [title, description, id]) != null
@@ -108,7 +106,7 @@ class TaskService {
     @CacheEvict(value="tasks", allEntries=true),
     @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    public void doRename(def id, def title) {
+    public void doRename(long id, String title) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE task SET title=? WHERE id=?',
                     [title, id]) != null
@@ -119,7 +117,7 @@ class TaskService {
     @CacheEvict(value="tasks", allEntries=true),
     @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    public void doMove(def id, def parentId, def siblingIndex) {
+    public void doMove(long id, String parentId, int siblingIndex) {
         def task = getTask (id)
         assert task.parentId!=null, "Cannot move workspace root"
 
@@ -146,27 +144,30 @@ class TaskService {
     @CacheEvict(value="tasks", allEntries=true),
     @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
-    public int doDelete(def ids) {
+    public int doDelete(Collection<Long> ids) {
+        if (!ids) {
+            return
+        }
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE task SET deleted=TRUE WHERE id IN (?)',
                     [ids.join (',')])
         }
     }
     @Cacheable("tasks")
-    def getTask(def id) {
+    public TaskBean getTask(Long id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.id=?', [id])
+            toBean (sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.id=?', [id]))
         }
     }
     @Cacheable("workspaceTasks")
-    def getTasks(def workspaceId) {
+    List<TaskBean> getTasks(long workspaceId) {
         withSql { String dataSourceName, Sql sql ->
-            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=? AND deleted<>TRUE',[workspaceId])
+            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=? AND deleted<>TRUE',[workspaceId]).collect {toBean (it)}
         }
     }
 
     @Cacheable("taskPathIds")
-    def getTaskPathIds(def taskId) {
+    public List<Long> getTaskPathIds(Long taskId) {
         println "getTaskPathIds called for taskId: $taskId (${taskId.getClass ()})"
         withSql { String dataSourceName, Sql sql ->
             def result=[]
@@ -186,5 +187,27 @@ class TaskService {
             )
             result
         }
+    }
+
+    /**
+     * Returns a TaskBean instance initialized with the specified properties
+     * @param props property values for the new bean
+     */
+    private TaskBean toBean (Map props) {
+        if (props==null) {
+            return null
+        }
+        return new TaskBean(
+            id: props.id,
+            workspaceId: props.workspaceId,
+            treeDepth: props.treeDepth,
+            treeCode: props.treeCode,
+            title: props.title,
+            description: props.description,
+            parentId: props.parentId,
+            siblingIndex: props.siblingIndex,
+            globalAmount: props.globalAmount,
+            localAmount: props.localAmount
+        )
     }
 }

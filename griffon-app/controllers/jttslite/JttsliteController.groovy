@@ -1,3 +1,31 @@
+/*
+ * Copyright (c) 2013, the original author or authors.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
 package jttslite
 
 import griffon.swing.SwingApplication
@@ -69,14 +97,14 @@ class JttsliteController {
     }
 
     def deleteTaskAction = {
-        List toDelete = new ArrayList (model.selectedTasks)
+        List toDelete = new ArrayList (model.taskSelection)
         taskService.doDelete(toDelete.collect {it.id})
         //remove items from model
         model.taskList.removeAll(toDelete)
     }
 
     def deleteWorklogAction = {
-        List toDelete = new ArrayList (model.selectedWorklogs)
+        List toDelete = new ArrayList (model.worklogSelection)
         worklogService.doDelete(toDelete.collect {it.id})
         //remove items from model
         model.worklogList.removeAll(toDelete)
@@ -138,7 +166,7 @@ class JttsliteController {
         startTimer ()
 
         //add the new worklog
-        model.worklogList.add (worklogService.getWorklog(model.workingLogId) as ObservableMap)
+        model.worklogList.add (worklogService.getWorklog(model.workingLogId))
         view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.Running', "Running")
     }
     def onStopProgress = { evt = null ->
@@ -146,12 +174,12 @@ class JttsliteController {
 
         worklogService.doStop(workingLogId)
         //refresh the stopped worklog
-        model.worklogMap[workingLogId] = worklogService.getWorklog(workingLogId) as ObservableMap
+        model.worklogMap[workingLogId] = worklogService.getWorklog(workingLogId)
         model.workingLogId = null
         stopTimer ()
         //refresh tasks above the stopped worklog
         taskService.getTaskPathIds().each {taskId->
-            model.taskMap[taskId] = taskService.getTask(taskId) as ObservableMap
+            model.taskMap[taskId] = taskService.getTask(taskId)
         }
         view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.Idle', "Idle")
     }
@@ -211,18 +239,18 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
-    def loadTasksForWorkspace(def workspaceId) {
-        loadTasks (taskService.getTasks(workspaceId).collect {it as ObservableMap})
+    def loadTasksForWorkspace(long workspaceId) {
+        loadTasks (taskService.getTasks(workspaceId))
         loadWorkingLog (workspaceId)
     }
 
-    def loadWorkingLog(def workspaceId) {
+    def loadWorkingLog(long workspaceId) {
         model.workingLogId = worklogService.getWorkingLog (workspaceId)?.id
         startTimer ()
     }
 
     @Threading(Threading.Policy.INSIDE_UITHREAD_SYNC)
-    def loadTasks(def tasks) {
+    void loadTasks(Collection<TaskBean> tasks) {
         model.taskList.addAll (tasks)
     }
 
@@ -253,7 +281,7 @@ def whenSpringReadyEnd = {app, applicationContext->
         dictionaryService.doSaveLong(LAST_WORKSPACE, model.workspaceId)
     }
 
-    def renameTask (def taskId, def newName) {
+    def renameTask (long taskId, String newName) {
         taskService.doRename(taskId, newName)
         model.taskMap[taskId].title = newName
     }
@@ -277,13 +305,17 @@ def whenSpringReadyEnd = {app, applicationContext->
                     globalAmount = 0
                 }
                 if (localAmount!=null) {
-                    modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
+//                    modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
+                    modelTask.localAmount = modelTask.localAmount + amount
                 }
-                modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
+//                modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
+                modelTask.globalAmount = modelTask.globalAmount + amount
             }
 
             def modelWorklog = model.worklogMap[workingLog.id]
-            modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
+//            modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
+            modelWorklog.amount = amount
+
             def runningDuration = DurationUtils.formatDuration(amount)
             view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.RunningWithAmount', [runningDuration], "Running ($runningDuration)".toString())
         } else {

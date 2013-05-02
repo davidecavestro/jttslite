@@ -5,7 +5,13 @@
     <setting name="cmdLine" value="--debug --debug-suspend=y --non-interactive --debug-port=18290 -Dgriffon.offline.mode=true run-app" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
+    <RunnerSettings RunnerId="GriffonDebugger">
+      <option name="DEBUG_PORT" value="" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
     <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="GriffonDebugger" />
     <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>

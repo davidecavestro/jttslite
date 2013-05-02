@@ -8,7 +8,7 @@ import groovy.sql.Sql
  * @author Davide Cavestro
  */
 class WorkspaceService {
-    public int doInsert(def name, def description=null) {
+    public long doInsert(String name, String description=null) {
         def newId
         withSql { String dataSourceName, Sql sql ->
             def keys = sql.executeInsert('INSERT INTO workspace (name, description) VALUES (?,?)',
@@ -17,43 +17,58 @@ class WorkspaceService {
         }
         return newId
     }
-    public void doUpdate(def id, def name, def description) {
+    public int doUpdate(long id, String name, String description) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE workspace SET name=?, description=? WHERE id=?',
                     [name, description, id]) != null
         }
     }
-    public int doDelete(def id) {
+    public int doDelete(Long id) {
         withSql { String dataSourceName, Sql sql ->
             sql.executeUpdate('UPDATE workspace SET deleted=TRUE WHERE id=?',
                     [id])
         }
     }
-    def getWorkspace(def id) {
+    public WorkspaceBean getWorkspace(Long id) {
         withSql { String dataSourceName, Sql sql ->
-            sql.firstRow('SELECT * FROM workspace WHERE id=?', [id])
+            toBean (sql.firstRow('SELECT * FROM workspace WHERE id=?', [id]))
         }
     }
-    def getWorkspaces() {
+    public List<WorkspaceBean> getWorkspaces() {
         withSql { String dataSourceName, Sql sql ->
             def result=[]
             sql.eachRow('SELECT * FROM workspace WHERE deleted=FALSE', {
-                    result<<[id:it.id, name:it.name, description:it.description]
-                }
+                    toBean (it)
+                }.collect()
             )
-            return result
+            return result.collect {it as WorkspaceBean}
         }
     }
 
-    boolean hasWorkspaces() {
+    public boolean hasWorkspaces() {
         return workspacesCount()>0
     }
 
-    int workspacesCount() {
+    public int workspacesCount() {
         withSql { String dataSourceName, Sql sql ->
             def result
             result = sql.firstRow('SELECT COUNT(*) AS wsnum FROM workspace WHERE deleted<>TRUE').wsnum
             return result
         }
+    }
+
+    /**
+     * Returns a WorkspaceBean instance initialized with the specified properties
+     * @param props property values for the new bean
+     */
+    private WorkspaceBean toBean (Map props) {
+        if (props==null) {
+            return null
+        }
+        return new WorkspaceBean(
+            id: props.id,
+            description: props.description,
+            name: props.name
+        )
     }
 }

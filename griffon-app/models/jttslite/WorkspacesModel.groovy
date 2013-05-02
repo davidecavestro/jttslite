@@ -6,8 +6,6 @@ import ca.odell.glazedlists.EventList
 import ca.odell.glazedlists.FunctionList
 import ca.odell.glazedlists.GlazedLists
 import ca.odell.glazedlists.ObservableElementList
-import ca.odell.glazedlists.SortedList
-import ca.odell.glazedlists.TreeList
 import ca.odell.glazedlists.swing.GlazedListsSwing
 
 class WorkspacesModel extends AbstractDialogModel {
@@ -17,10 +15,10 @@ class WorkspacesModel extends AbstractDialogModel {
     /**
      * the workspaces list
      */
-    EventList workspaceList = GlazedLists.threadSafeList(new BasicEventList ())
-    ObservableElementList observableWorkspaceList = new ObservableElementList (workspaceList, GlazedLists.beanConnector (ObservableMap.class))
-    DisposableMap workspaceMap = GlazedLists.syncEventListToMap(workspaceList, new WorkspaceMaker ())
-    EventList swingProxyWorkspaceList = GlazedListsSwing.swingThreadProxyList(observableWorkspaceList)
+    EventList<WorkspaceBean> workspaceList = GlazedLists.threadSafeList(new BasicEventList ())
+    ObservableElementList<WorkspaceBean> observableWorkspaceList = new ObservableElementList (workspaceList, GlazedLists.beanConnector (WorkspaceBean.class))
+    DisposableMap<Long, WorkspaceBean> workspaceMap = GlazedLists.syncEventListToMap(workspaceList, new WorkspaceKeyMaker ())
+    EventList<WorkspaceBean> swingProxyWorkspaceList = GlazedListsSwing.swingThreadProxyList(observableWorkspaceList)
     Long selectedWorkspaceId
 
     @Override
@@ -43,9 +41,9 @@ class WorkspacesModel extends AbstractDialogModel {
         height = 320
     }
 
-    class WorkspaceMaker implements FunctionList.Function<Map, Object> {
+    class WorkspaceKeyMaker implements FunctionList.Function<WorkspaceBean, Long> {
 
-        Object evaluate(Map sourceValue) {
+        Long evaluate(WorkspaceBean sourceValue) {
             return sourceValue.id
         }
     }

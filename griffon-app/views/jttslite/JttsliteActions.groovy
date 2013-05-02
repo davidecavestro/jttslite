@@ -39,12 +39,12 @@ actions {
     action(
             id: "deleteTaskAction",
             name: "Delete tasks",
-            enabled: bind {model.treeSelection}
+            enabled: bind {model.tasksSelected}
     )
     action(
             id: "deleteWorklogAction",
             name: "Delete worklogs",
-            enabled: bind {model.tableSelection}
+            enabled: bind {model.worklogsSelected}
     )
 
     action(

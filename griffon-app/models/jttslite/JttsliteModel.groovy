@@ -1,3 +1,31 @@
+/*
+ * Copyright (c) 2013, the original author or authors.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
 package jttslite
 
 import ca.odell.glazedlists.*
@@ -10,16 +38,18 @@ class JttsliteModel {
     @Bindable boolean working
     @Bindable String status
     @Bindable Long selectedTaskId
-    @Bindable EventList selectedTasks
-    @Bindable EventList selectedWorklogs
+    @Bindable List<TaskBean> taskSelection = new ObservableList()
+    @Bindable List<WorklogBean> worklogSelection = new ObservableList()
     @Bindable Long workingLogId
     @Bindable Long workspaceId
+    @Bindable boolean tasksSelected
+    @Bindable boolean worklogsSelected
 
     @Bindable boolean startEnabled
     @Bindable boolean stopEnabled
 
-    def workingLog
-    List workingPathIds //ids of tasks on the path from the "running" worklog to the root
+    WorklogBean workingLog
+    List<Long> workingPathIds //ids of tasks on the path from the "running" worklog to the root
 
     TaskService taskService
     WorklogService worklogService
@@ -35,10 +65,10 @@ class JttsliteModel {
     /**
      * the task list
      */
-    BasicEventList taskList = GlazedLists.threadSafeList(new BasicEventList ())
-    ObservableElementList observableTaskList = new ObservableElementList (taskList, GlazedLists.beanConnector (ObservableMap.class))
-    DisposableMap taskMap = GlazedLists.syncEventListToMap(observableTaskList, new TaskKeyMaker ())
-    EventList swingProxyTaskList = GlazedListsSwing.swingThreadProxyList(observableTaskList)//hack to avoid NPE on GL treetable
+    BasicEventList<TaskBean> taskList = GlazedLists.threadSafeList(new BasicEventList ())
+    ObservableElementList<TaskBean> observableTaskList = new ObservableElementList (taskList, GlazedLists.beanConnector (TaskBean.class))
+    DisposableMap<Long, TaskBean> taskMap = GlazedLists.syncEventListToMap(observableTaskList, new TaskKeyMaker ())
+    EventList<TaskBean> swingProxyTaskList = GlazedListsSwing.swingThreadProxyList(observableTaskList)//hack to avoid NPE on GL treetable
     def taskTreeNodeComparator = {a,b->
         def level = a.treeDepth <=> b.treeDepth
         if (level!=0) {
@@ -46,12 +76,12 @@ class JttsliteModel {
         }
         return a.siblingIndex <=> b.siblingIndex
     } as Comparator
-    TreeList taskTreeList = new TreeList(new SortedList (swingProxyTaskList, taskTreeNodeComparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
+    TreeList<TaskBean> taskTreeList = new TreeList(new SortedList (swingProxyTaskList, taskTreeNodeComparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
 
-    EventList worklogList = GlazedLists.threadSafeList(new BasicEventList ())
-    ObservableElementList observableWorklogList = new ObservableElementList (worklogList, GlazedLists.beanConnector (ObservableMap.class))
-    DisposableMap worklogMap = GlazedLists.syncEventListToMap(worklogList, new WorklogKeyMaker ())
-    EventList swingProxyWorklogList = GlazedListsSwing.swingThreadProxyList(observableWorklogList)
+    EventList<WorklogBean> worklogList = GlazedLists.threadSafeList(new BasicEventList ())
+    ObservableElementList<WorklogBean> observableWorklogList = new ObservableElementList (worklogList, GlazedLists.beanConnector (WorklogBean.class))
+    DisposableMap<Long, WorklogBean> worklogMap = GlazedLists.syncEventListToMap(worklogList, new WorklogKeyMaker ())
+    EventList<WorklogBean> swingProxyWorklogList = GlazedListsSwing.swingThreadProxyList(observableWorklogList)
 
 
 
@@ -62,7 +92,7 @@ class JttsliteModel {
         worklogList.clear()//clear previous worklog list
         if (taskId!=null) {
             execOutsideUI {
-                def newData = worklogService.getWorklogs(taskId).collect {it as ObservableMap}
+                def newData = worklogService.getWorklogs(taskId)
                 execInsideUIAsync {
                     worklogList.addAll(newData)//show  worklogs for current selection
                 }
@@ -88,6 +118,21 @@ class JttsliteModel {
         status = "Welcome to ${GriffonNameUtils.capitalize(app.getMessage('application.title'))}"
     }
 
+
+    public void setTaskSelection (List<TaskBean> taskSelection) {
+        this.taskSelection.clear ()
+        this.taskSelection.addAll (taskSelection)
+
+        this.tasksSelected = !taskSelection?.isEmpty()
+    }
+
+    public void setWorklogSelection (List<TaskBean> worklogSelection) {
+        this.worklogSelection.clear ()
+        this.worklogSelection.addAll (worklogSelection)
+
+        this.worklogsSelected = !worklogSelection?.isEmpty()
+    }
+
     private class TaskTreeFormat implements TreeList.Format {
         public void getPath(List path, Object element) {
             def taskPath = taskService.getTaskPathIds (element.id)
@@ -109,15 +154,15 @@ class JttsliteModel {
         }
     }
 
-    class TaskKeyMaker implements FunctionList.Function<Map, Object> {
+    class TaskKeyMaker implements FunctionList.Function<TaskBean, Long> {
 
-        Object evaluate(Map sourceValue) {
+        Long evaluate(TaskBean sourceValue) {
             return sourceValue.id
         }
     }
-    class WorklogKeyMaker implements FunctionList.Function<Map, Object> {
+    class WorklogKeyMaker implements FunctionList.Function<WorklogBean, Long> {
 
-        Object evaluate(Map sourceValue) {
+        Long evaluate(WorklogBean sourceValue) {
             return sourceValue.id
         }
     }
