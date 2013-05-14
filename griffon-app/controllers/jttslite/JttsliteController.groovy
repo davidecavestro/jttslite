@@ -313,8 +313,10 @@ def whenSpringReadyEnd = {app, applicationContext->
             }
 
             def modelWorklog = model.worklogMap[workingLog.id]
+            if (modelWorklog) {//the working log is loaded: its amount have to increment
 //            modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
-            modelWorklog.amount = amount
+                modelWorklog.amount = amount
+            }
 
             def runningDuration = DurationUtils.formatDuration(amount)
             view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.RunningWithAmount', [runningDuration], "Running ($runningDuration)".toString())

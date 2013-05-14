@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Griffon:jttslite debug" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
-    <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="--debug --debug-suspend=y --non-interactive --debug-port=18290 -Dgriffon.offline.mode=true run-app" />
+    <setting name="vmparams" value="-Dgriffon.offline.mode=true" />
+    <setting name="cmdLine" value="--debug --debug-suspend=y --non-interactive --debug-port=18290 run-app" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
     <RunnerSettings RunnerId="GriffonDebugger">

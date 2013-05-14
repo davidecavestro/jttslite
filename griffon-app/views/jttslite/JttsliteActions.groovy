@@ -8,19 +8,25 @@ def deleteAction = new ProxyingSwingAction ()
 app.addApplicationEventListener([
         TreeGainedFocus: {a->
 //            deleteProxyingAction.wrap (treeDeleteAction)
-            deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteTaskAction'))
+            execInsideUIAsync {
+                deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteTaskAction'))
+            }
         },
         TreeLostFocus: {a->
             deleteAction.wrap (null)
         },
         TableGainedFocus: {a->
-            deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteWorklogAction'))
+            execInsideUIAsync {
+                deleteAction.wrap (app.actionManager.actionFor (controller, 'deleteWorklogAction'))
+            }
         },
         TableLostFocus: {a->
             deleteAction.wrap (null)
         },
         DeleteTriggered: {a->
-            deleteAction.actionPerformed ()
+            execInsideUIAsync {
+                deleteAction.actionPerformed ()
+            }
         }
 ])
 actions {
@@ -40,11 +46,13 @@ actions {
             id: "deleteTaskAction",
             name: "Delete tasks",
             enabled: bind {model.tasksSelected}
+//            enabled: bind {model.startEnabled}
     )
     action(
             id: "deleteWorklogAction",
             name: "Delete worklogs",
             enabled: bind {model.worklogsSelected}
+//            enabled: bind {model.stopEnabled}
     )
 
     action(
@@ -52,6 +60,7 @@ actions {
             name: "Start",
             smallIcon: fatcowIcon(icon:"clock_play", size: 16),
             enabled: bind {model.startEnabled},
+//            enabled: bind {model.tasksSelected},
             closure: controller.&startProgress
     )
 
@@ -60,6 +69,7 @@ actions {
             name: "Stop",
             smallIcon: fatcowIcon(icon:"clock_stop", size: 16),
             enabled: bind {model.stopEnabled},
+//            enabled: bind {model.worklogsSelected},
             closure: controller.&stopProgress
     )
 

@@ -63,7 +63,7 @@ class JttsliteModel {
     }
 
     /**
-     * the task list
+     * the task list: represents the  tasks on the current workspace
      */
     BasicEventList<TaskBean> taskList = GlazedLists.threadSafeList(new BasicEventList ())
     ObservableElementList<TaskBean> observableTaskList = new ObservableElementList (taskList, GlazedLists.beanConnector (TaskBean.class))
@@ -78,6 +78,9 @@ class JttsliteModel {
     } as Comparator
     TreeList<TaskBean> taskTreeList = new TreeList(new SortedList (swingProxyTaskList, taskTreeNodeComparator), new TaskTreeFormat(), TreeList.NODES_START_EXPANDED)
 
+    /**
+     * The worklog list: represents the worklogs of the selected tasks
+     */
     EventList<WorklogBean> worklogList = GlazedLists.threadSafeList(new BasicEventList ())
     ObservableElementList<WorklogBean> observableWorklogList = new ObservableElementList (worklogList, GlazedLists.beanConnector (WorklogBean.class))
     DisposableMap<Long, WorklogBean> worklogMap = GlazedLists.syncEventListToMap(worklogList, new WorklogKeyMaker ())
@@ -94,6 +97,7 @@ class JttsliteModel {
             execOutsideUI {
                 def newData = worklogService.getWorklogs(taskId)
                 execInsideUIAsync {
+                    log.debug("Showing worklogs for taskId $taskId: $newData")
                     worklogList.addAll(newData)//show  worklogs for current selection
                 }
             }
@@ -121,16 +125,22 @@ class JttsliteModel {
 
     public void setTaskSelection (List<TaskBean> taskSelection) {
         this.taskSelection.clear ()
-        this.taskSelection.addAll (taskSelection)
+        if (taskSelection) {
+            this.taskSelection.addAll (taskSelection)
+        }
 
-        this.tasksSelected = !taskSelection?.isEmpty()
+        setTasksSelected (!taskSelection.isEmpty())
+        println "tasksSelected: $tasksSelected"
     }
 
     public void setWorklogSelection (List<TaskBean> worklogSelection) {
         this.worklogSelection.clear ()
-        this.worklogSelection.addAll (worklogSelection)
+        if (worklogSelection) {
+            this.worklogSelection.addAll (worklogSelection)
+        }
 
-        this.worklogsSelected = !worklogSelection?.isEmpty()
+        setWorklogsSelected (!worklogSelection.isEmpty())
+        println "worklogsSelected: $worklogsSelected"
     }
 
     private class TaskTreeFormat implements TreeList.Format {

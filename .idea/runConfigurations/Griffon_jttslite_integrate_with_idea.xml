@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Griffon:jttslite integrate-with idea" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
-    <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="integrate-with -idea -Dgriffon.offline.mode=true" />
+    <setting name="vmparams" value="-Dgriffon.offline.mode=true" />
+    <setting name="cmdLine" value="integrate-with -idea" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
     <RunnerSettings RunnerId="Run" />

@@ -54,7 +54,7 @@ public class ProxyingSwingAction extends AbstractAction {
         void propertyChange(PropertyChangeEvent event) {
             //apply this[event.propertyName] <= event.newValue
             println "propertyChange $event"
-            delegateAction[event.propertyName] = event.newValue
+            ProxyingSwingAction.this.putValue (event.propertyName, event.newValue)
         }
     }
 
@@ -90,7 +90,7 @@ public class ProxyingSwingAction extends AbstractAction {
     }
 
 
-    def copyProperties(def source, def target){
+    def copyProperties(AbstractAction source, AbstractAction target){
         /*
         target.metaClass.properties.each{
             if (source.metaClass.hasProperty(source, it.name)
@@ -109,7 +109,7 @@ public class ProxyingSwingAction extends AbstractAction {
             target.putValue (it, null)
         }
 
-        target.enabled = source.enabled
+        target.setEnabled (source.enabled)
         //copy new ones from source
         source.keys?.each {
             if (it instanceof String && it!="enabled") {

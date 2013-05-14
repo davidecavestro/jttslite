@@ -33,13 +33,11 @@
           <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/lib" />
           <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" />
           <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jide-builder-1.0.0/lib" />
-          <root url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/liquibase-0.2/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/charts-1.0.0/lib" recursive="false" />
         <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/jide-builder-1.0.0/lib" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/liquibase-0.2/lib" recursive="false" />
         <jarDirectory url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/oxbow-1.0.0/lib" recursive="false" />
       </library>
     </orderEntry>

@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Griffon:jttslite clean and upgrade" type="GriffonRunConfigurationType" factoryName="Griffon">
     <module name="jttslite" />
-    <setting name="vmparams" value="" />
-    <setting name="cmdLine" value="-Dgriffon.artifact.force.upgrade=true clean" />
+    <setting name="vmparams" value="-Dgriffon.artifact.force.upgrade=true" />
+    <setting name="cmdLine" value="clean" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
     <RunnerSettings RunnerId="Run" />
