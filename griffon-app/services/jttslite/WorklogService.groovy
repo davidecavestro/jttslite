@@ -44,24 +44,22 @@ class WorklogService {
     @Cacheable("worklogs")
     WorklogBean getWorklog(long worklogId) {
         withSql { String dataSourceName, Sql sql ->
-            toBean (sql.firstRow('SELECT * FROM worklog WHERE id=? AND deleted=FALSE',[worklogId]))
+            toBean (sql.firstRow('SELECT * FROM worklog_period WHERE id=? AND deleted=FALSE',[worklogId]))
         }
     }
 
     @Cacheable("worklogs")
     List<WorklogBean> getWorklogs(long taskId) {
         withSql { String dataSourceName, Sql sql ->
-            def result=[]
-            sql.eachRow('SELECT * FROM worklog WHERE taskId=? AND deleted<>TRUE',
-                    [taskId], {result<<[id:it.id, taskId:it.taskId, start:it.start, amount:it.amount, comment:it.comment]})
-            return result.collect{toBean (it)}
+            return sql.rows('SELECT * FROM worklog_period WHERE taskId=? AND deleted<>TRUE',
+                    [taskId]).collect {toBean (it)}
         }
     }
 
     @Cacheable("worklogs")
     WorklogBean getWorkingLog(long workspaceId) {
         withSql { String dataSourceName, Sql sql ->
-            toBean (sql.firstRow('SELECT worklog.id AS id, worklog.taskId AS taskId, worklog.start AS start, worklog.amount AS amount, worklog.comment AS comment FROM worklog, task WHERE worklog.amount IS NULL AND worklog.taskId=task.id AND task.workspaceId=?',[workspaceId]))
+            toBean (sql.firstRow('SELECT * FROM worklog_period, task WHERE worklog_period.amount IS NULL AND worklog_period.taskId=task.id AND task.workspaceId=?',[workspaceId]))
         }
     }
 

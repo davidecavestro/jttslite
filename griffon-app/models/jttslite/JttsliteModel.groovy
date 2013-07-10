@@ -130,7 +130,6 @@ class JttsliteModel {
         }
 
         setTasksSelected (!taskSelection.isEmpty())
-        println "tasksSelected: $tasksSelected"
     }
 
     public void setWorklogSelection (List<TaskBean> worklogSelection) {

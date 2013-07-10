@@ -1,8 +1,8 @@
 package jttslite
 
 menuBar = toolBar {
-    button (icon:fatcowIcon(icon:'package_add', size:32))
-    button (icon:fatcowIcon(icon:'add', size:32))
+    button (action: newWorkspaceAction, icon:fatcowIcon(icon:'package_add', size:32))
+    button (action: newTaskAction, icon:fatcowIcon(icon:'add', size:32))
     button (icon:fatcowIcon(icon:'package_go', size:32))
     button (icon:fatcowIcon(icon:'clock_add', size:32))
     button (action: startWorkLogAction, icon:fatcowIcon(icon:'clock_play', size:32))

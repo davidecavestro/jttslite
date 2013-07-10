@@ -29,6 +29,7 @@ package jttslite
 
 import griffon.core.controller.GriffonControllerAction
 import griffon.test.GriffonUnitTestCase
+import griffon.test.mock.MockController
 import org.codehaus.griffon.runtime.swing.SwingGriffonControllerAction
 
 /**
@@ -49,8 +50,10 @@ class ProxyingSwingActionTests extends GriffonUnitTestCase {
 
     void testSomething() {
         ProxyingSwingAction a = new ProxyingSwingAction()
-        GriffonController controller = new GriffonController ()
-        GriffonControllerAction wrapped = new SwingGriffonControllerAction ()
+        MockController controller = new MockController ()
+        //GriffonController controller = new GriffonController ()
+        GriffonControllerAction wrapped = new SwingGriffonControllerAction (controller, 'foo')
         a.wrap(wrapped)
+
     }
 }

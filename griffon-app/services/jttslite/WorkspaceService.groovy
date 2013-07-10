@@ -36,12 +36,7 @@ class WorkspaceService {
     }
     public List<WorkspaceBean> getWorkspaces() {
         withSql { String dataSourceName, Sql sql ->
-            def result=[]
-            sql.eachRow('SELECT * FROM workspace WHERE deleted=FALSE', {
-                    toBean (it)
-                }.collect()
-            )
-            return result.collect {it as WorkspaceBean}
+            sql.rows('SELECT * FROM workspace WHERE deleted=FALSE').collect {toBean (it)}
         }
     }
 

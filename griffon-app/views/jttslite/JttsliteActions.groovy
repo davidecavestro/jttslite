@@ -30,6 +30,15 @@ app.addApplicationEventListener([
         }
 ])
 actions {
+    action(
+        id: "newWorkspaceAction",
+        smallIcon: fatcowIcon(icon:"package_add", size: 16)
+    )
+    action(
+        id: "newTaskAction",
+        smallIcon: fatcowIcon(icon:"add", size: 16)
+    )
+
     action(saveAction, enabled: false)
     action(saveAsAction, enabled: false)
     action(undoAction, enabled: false)
@@ -38,39 +47,39 @@ actions {
     action(copyAction, enabled: false)
     action(pasteAction, enabled: false)
     action('deleteAction' ,
-            accelerator: KeyStroke.getKeyStroke(app.getMessage('application.action.Delete.accelerator', 'meta DELETE')),
-            enabled: false
+        accelerator: KeyStroke.getKeyStroke(app.getMessage('application.action.Delete.accelerator', 'meta DELETE')),
+        enabled: false
     )//{deleteAction}
 
     action(
-            id: "deleteTaskAction",
-            name: "Delete tasks",
-            enabled: bind {model.tasksSelected}
+        id: "deleteTaskAction",
+        name: "Delete tasks",
+        enabled: bind {model.tasksSelected}
 //            enabled: bind {model.startEnabled}
     )
     action(
-            id: "deleteWorklogAction",
-            name: "Delete worklogs",
-            enabled: bind {model.worklogsSelected}
+        id: "deleteWorklogAction",
+        name: "Delete worklogs",
+        enabled: bind {model.worklogsSelected}
 //            enabled: bind {model.stopEnabled}
     )
 
     action(
-            id: "startWorkLogAction",
-            name: "Start",
-            smallIcon: fatcowIcon(icon:"clock_play", size: 16),
-            enabled: bind {model.startEnabled},
+        id: "startWorkLogAction",
+        name: "Start",
+        smallIcon: fatcowIcon(icon:"clock_play", size: 16),
+        enabled: bind {model.startEnabled},
 //            enabled: bind {model.tasksSelected},
-            closure: controller.&startProgress
+        closure: controller.&startProgress
     )
 
     action(
-            id: "stopWorkLogAction",
-            name: "Stop",
-            smallIcon: fatcowIcon(icon:"clock_stop", size: 16),
-            enabled: bind {model.stopEnabled},
+        id: "stopWorkLogAction",
+        name: "Stop",
+        smallIcon: fatcowIcon(icon:"clock_stop", size: 16),
+        enabled: bind {model.stopEnabled},
 //            enabled: bind {model.worklogsSelected},
-            closure: controller.&stopProgress
+        closure: controller.&stopProgress
     )
 
     action(editWorkspacesAction, enabled: true)

@@ -36,6 +36,9 @@ import javax.swing.JFrame
 
 import griffon.transform.Threading
 
+/**
+ * The main controller
+ */
 class JttsliteController {
 
     WorkspaceService workspaceService
@@ -46,7 +49,15 @@ class JttsliteController {
     JttsliteModel model
     JttsliteView view
 
-    def newAction = {
+    /**
+     * The timer used to reflect working log related changes
+     */
+    TimerTask updateRunningTicTask
+
+    def newWorkspaceAction = {
+    }
+
+    def newTaskAction = {
     }
 
     def openAction = {
@@ -98,16 +109,20 @@ class JttsliteController {
 
     def deleteTaskAction = {
         List toDelete = new ArrayList (model.taskSelection)
-        taskService.doDelete(toDelete.collect {it.id})
-        //remove items from model
-        model.taskList.removeAll(toDelete)
+        if (toDelete) {
+            taskService.doDelete(toDelete.collect {it.id})
+            //remove items from model
+            model.taskList.removeAll(toDelete)
+        }
     }
 
     def deleteWorklogAction = {
         List toDelete = new ArrayList (model.worklogSelection)
-        worklogService.doDelete(toDelete.collect {it.id})
-        //remove items from model
-        model.worklogList.removeAll(toDelete)
+        if (toDelete) {
+            worklogService.doDelete(toDelete.collect {it.id})
+            //remove items from model
+            model.worklogList.removeAll(toDelete)
+        }
     }
 
     def editWorkspacesAction = {
@@ -175,12 +190,16 @@ class JttsliteController {
         worklogService.doStop(workingLogId)
         //refresh the stopped worklog
         model.worklogMap[workingLogId] = worklogService.getWorklog(workingLogId)
+
         model.workingLogId = null
         stopTimer ()
         //refresh tasks above the stopped worklog
+        onWorkingTic (model.worklogMap[workingLogId])
+        /*
         taskService.getTaskPathIds().each {taskId->
             model.taskMap[taskId] = taskService.getTask(taskId)
         }
+        */
         view.systemTray.trayIcons[0].toolTip = app.getMessage ('application.tray.Idle', "Idle")
     }
 
@@ -211,12 +230,9 @@ class JttsliteController {
 def whenSpringReadyEnd = {app, applicationContext->
 }*/
 
-    def loadData = { evt = null ->
+    def loadData() {
+        loadLastWorkspace()
         app.event('DataLoad')
-    }
-
-    def onDataLoad = { evt = null ->
-        loadLastWorkspace ()
     }
 
     def configureForProduction() {
@@ -255,14 +271,14 @@ def whenSpringReadyEnd = {app, applicationContext->
     }
 
     /**
-     * Load the last workspace loaded (upon restart). If this is the first run the last workspace loaded is no more
-     * available loads the first available workspace.
+     * Load the last workspace loaded (upon restart). If this is the first run or the last workspace loaded is no more
+     * available, then loads the first available workspace.
      *
      * <p>
      *     Loading a workspace implies loading its data into application UI.
      * </p>
      */
-    def loadLastWorkspace() {
+    public void loadLastWorkspace() {
         griffon.plugins.splash.SplashScreen.instance.showStatus(app.getMessage ('application.splash.LoadingLastWorkspace', "Loading last workspace used"))
         model.workspaceId = dictionaryService.getLongValue(LAST_WORKSPACE)
         if (model.workspaceId==null || !workspaceService.getWorkspace (model.workspaceId)) {
@@ -281,39 +297,29 @@ def whenSpringReadyEnd = {app, applicationContext->
         dictionaryService.doSaveLong(LAST_WORKSPACE, model.workspaceId)
     }
 
-    def renameTask (long taskId, String newName) {
+    /**
+     * Renames a task.
+     *
+     * @param taskId the task id
+     * @param newName the new task name
+     */
+    void renameTask (long taskId, String newName) {
         taskService.doRename(taskId, newName)
         model.taskMap[taskId].title = newName
     }
 
-    TimerTask updateRunningTicTask
-
-    def onWorkingTic(TicTimerTask timerTask) {
+    /**
+     * Refreshes working log related data in order to reflect the working log current amount.
+     *
+     * @param timerTask the task that should be canceled when the worklog is stopped
+     */
+    void onWorkingTic(TicTimerTask timerTask) {
         if (model.working) {
             def workingLog = model.workingLog
-            def amount = System.currentTimeMillis() - workingLog.start.time
-            println "updating amounts for workingPathIds: $model.workingPathIds"
-            model.workingPathIds.each {taskId->
-                def modelTask = model.taskMap[taskId]
-                println "updating amounts for task id: $taskId"
-                def localAmount = modelTask.localAmount
-                if (localAmount==null && workingLog.taskId==taskId) {//the working log is on the task
-                    localAmount = 0
-                }
-                def globalAmount = modelTask.globalAmount
-                if (globalAmount==null) {
-                    globalAmount = 0
-                }
-                if (localAmount!=null) {
-//                    modelTask.firePropertyUpdatedEvent ('localAmount', localAmount, localAmount + amount)
-                    modelTask.localAmount = modelTask.localAmount + amount
-                }
-//                modelTask.firePropertyUpdatedEvent ('globalAmount', globalAmount, globalAmount + amount)
-                modelTask.globalAmount = modelTask.globalAmount + amount
-            }
+            def amount = onWorkingTic (workingLog)
 
             def modelWorklog = model.worklogMap[workingLog.id]
-            if (modelWorklog) {//the working log is loaded: its amount have to increment
+            if (modelWorklog) {//the working log is actually visible: its amount should be incremented
 //            modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, amount)
                 modelWorklog.amount = amount
             }
@@ -325,21 +331,36 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
+    Long onWorkingTic(WorklogBean workingLog) {
+        def amount = workingLog.amount!=null?workingLog.amount:System.currentTimeMillis() - workingLog.start.time
+
+        model.workingPathIds.each {taskId->
+            def modelTask = model.taskMap[taskId]
+            modelTask.localWorkingAmount = modelTask.localAmount + amount
+            modelTask.globalWorkingAmount = modelTask.globalAmount + amount
+        }
+
+        return amount
+    }
+
     Timer timer
     def startTimer () {
         timer = new Timer()
         updateRunningTicTask = new TicTimerTask()
-        timer.schedule (updateRunningTicTask, 0l, 1000l)
+        timer.schedule (updateRunningTicTask, 0l, 1000l) //tic once per second
     }
     def stopTimer () {
         updateRunningTicTask?.cancel ()
         timer?.purge()
     }
 
+    /**
+     * Repeatedly calls the working log refresh routine
+     */
     class TicTimerTask extends TimerTask {
         @Override
         void run() {
-            onWorkingTic (this)
+            JttsliteController.this.onWorkingTic (this)
         }
     }
 }

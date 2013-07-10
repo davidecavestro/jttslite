@@ -6,8 +6,8 @@ menuBar = menuBar {
     //File
     menu(text: app.getMessage('application.menu.File.name',' File'),
          mnemonic: app.getMessage('application.menu.File.mnemonic', 'F')) {
-        menuItem(text: 'New Workspace', icon:fatcowIcon(icon:'package_add', size:16))
-        menuItem(newAction)
+        menuItem(newWorkspaceAction)
+        menuItem(newTaskAction)
         separator()
         menuItem(openAction, icon:fatcowIcon(icon:'package_go', size:16))
         menuItem(text: 'Export Workspace', icon:fatcowIcon(icon:'document_export', size:16))

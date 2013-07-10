@@ -63,15 +63,15 @@ class TaskService {
         def newId
         withSql { String dataSourceName, Sql sql ->
             def siblingIndex
-            def treeDepth
+            def treeDepth = 0
             def treeCode
             def parent
             if (parentId!=null) {
                 siblingIndex = sql.firstRow('SELECT MAX(siblingIndex) AS siblingIndex FROM task WHERE parentId=?', [parentId]).siblingIndex
                 parent = getTask (parentId)
-                treeDepth = parent.treeDepth+1
-            } else {
-                treeDepth = 0
+                if (parent) {
+                    treeDepth = parent.treeDepth+1
+                }
             }
             if (siblingIndex!=null) {
                 siblingIndex++

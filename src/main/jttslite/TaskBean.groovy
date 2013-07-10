@@ -80,4 +80,12 @@ class TaskBean {
      * The sum of worklogs amounts for the entire task subtree
      */
     Long globalAmount
+    /**
+     * The sum of localAmount plus working log amount
+     */
+    Long localWorkingAmount
+    /**
+     * The sum of globalAmount plus working log amount
+     */
+    Long globalWorkingAmount
 }

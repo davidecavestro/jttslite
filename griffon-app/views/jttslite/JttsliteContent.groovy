@@ -31,38 +31,17 @@ package jttslite
 import ca.odell.glazedlists.EventList
 import ca.odell.glazedlists.swing.TreeTableSupport
 import net.miginfocom.swing.MigLayout
+import org.jdesktop.swingx.JXTable
 import org.jfree.chart.ChartPanel
 
 import javax.swing.*
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
+import javax.swing.table.JTableHeader
 import java.awt.*
 import java.awt.event.FocusEvent
 import java.awt.event.FocusListener
 
-//panel {
-//    migLayout layoutConstraints: 'fill'
-//    splitPane {
-//        scrollPane (constraints: 'left'){
-//            jxtree( id: "topics" )
-//        }
-//        scrollPane (constraints: 'right'){
-//            jxtree( id: "topics" )
-//        }
-//    }
-//}
-/* -------------------------------------------------- */
-/* -------------------- MENU BAR -------------------- */
-/* -------------------------------------------------- */
-//menuBar{
-//    menu('Application'){
-//        menuItem(text:'Exit',icon:imageIcon('/griffon-icon-16x16.png'),
-//                actionPerformed:controller.exitApplication)
-//    }
-//}
-/* -------------------------------------------------- */
-/* -------------------- LAYOUT ---------------------- */
-/* -------------------------------------------------- */
 
 GriffonApplication application = app
 
@@ -71,47 +50,41 @@ splitPane {
         dockingFrame(preferredSize: new java.awt.Dimension(300,400)) {
             panel(title:'Tasks'){
                 borderLayout()
-                panel(name:'mainPanel',layout: new MigLayout("fill"),constraints:java.awt.BorderLayout.NORTH){
-//                    def delRenderer = new DefaultTreeCellRenderer()
-
-//                    def taskTree = jxtree( id: "tasks", rootVisible: false, editable: true, cellRenderer: [
-//                            getTreeCellRendererComponent: {tree, value, selected, expanded, leaf, row, focus ->
-////                                if (value instanceof TreeList.Node)
-////                                    value = value.element.bean[value.element.property]
-//                                delRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, focus)
-//                            }] as TreeCellRenderer) {
-//                        eventTreeModel (source: model.tasks) {
-//                            afterEdit { path, node, value ->
-//                                node.element.bean[node.element.property] = value
-//                            }
-//                        }
-//                    }
-
-                    noparent {
-                        selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)//see https://sites.google.com/site/glazedlists/documentation/faq#TOC-JLists-JTables
-                        selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
-                    }
-                    JTable taskTreeTable = new JTable() {
-                        Component prepareRenderer() {
-                            super.prepareRenderer ()
+                busyComponent(id: "c0", constraints: CENTER/*, busy: bind(source:model,sourceProperty:'searchResultsPanelEnabled')*/) {
+                    busyModel(description: "Please Wait...")
+                    scrollPane(name:'taskTreeTableWrapper',constraints:BorderLayout.CENTER) {
+                        noparent {
+                            selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.taskTreeList)//see https://sites.google.com/site/glazedlists/documentation/faq#TOC-JLists-JTables
+                            selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                         }
-                    }
-                    /*
-                    taskTreeTable.setSortable(false);
-                    taskTreeTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
-                    taskTreeTable.setAutoCreateRowSorter(false);
-                    taskTreeTable.setRowSorter(null);
-                    taskTreeTable.columnControlVisible = true
-                    */
-                    scrollPane {
-                        table(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
+                        JXTable taskTreeTable = new JXTable() {
+                            Component prepareRenderer() {
+                                super.prepareRenderer ()
+                            }
+                        }
+
+                        taskTreeTable.setSortable(false);
+                        taskTreeTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
+                        taskTreeTable.setAutoCreateRowSorter(false);
+                        taskTreeTable.setRowSorter(null);
+                        taskTreeTable.columnControlVisible = true
+                        taskTreeTable.fillsViewportHeight = false //see http://glazedlists.1045722.n5.nabble.com/JXTable-viewport-not-repainted-after-clearing-the-eventList-tp5709890p5709929.html
+
+                        jxtable(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
                             tableFormat = defaultWritableTableFormat(columns: [
-                                    [name: 'title', title: 'Name', write: {baseObject, columnNames, index, editedValue->
+                                    [name: 'title', title: 'Name', write: {target, columnNames, index, editedValue->
                                         //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
-                                        controller.renameTask (baseObject.id, editedValue)
+                                        controller.renameTask (target.id, editedValue)
                                     }],
-                                    [name: 'localAmount', title: 'Local amount'],
-                                    [name: 'globalAmount', title: 'Subtree amount']],
+                                    [name: 'localWorkingAmount', title: 'Local amount', read: {target, columnNames, index->
+                                        def localWorkingAmount = target.localWorkingAmount
+                                        //uses working (bound) amount if available, otherwise use persistent data
+                                        localWorkingAmount!=null?localWorkingAmount:target.localAmount
+                                    }],
+                                    [name: 'globalWorkingAmount', title: 'Subtree amount', read: {target, columnNames, index->
+                                        def globalWorkingAmount = target.globalWorkingAmount
+                                        globalWorkingAmount!=null?globalWorkingAmount:target.globalAmount
+                                    }]],
                             editable: {baseObject, columnNames, index->index==0})
                             eventTableModel(source:model.taskTreeList, format:tableFormat)
                             TreeTableSupport treeTableSupport = installTreeTableSupport(source:model.taskTreeList, index:0i)
@@ -125,6 +98,9 @@ splitPane {
                                 Font localAmountBoldFont
                                 Font globalAmountBoldFont
 
+                                /*
+                                 * working log amount processing
+                                 */
                                 def localDurationClosure = { row->
                                     TaskBean task = taskTreeTable.model.getElementAt(row)
                                     boolean progressing = model.workingLog?.taskId == task.id
@@ -183,8 +159,8 @@ splitPane {
                                     }
                                 }
 
-                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (durationClosure:localDurationClosure, fontClosure: localAmountFontClosure))
-                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer (durationClosure:globalDurationClosure, fontClosure: globalAmountFontClosure))
+                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(new DurationTableCellRenderer (/*durationClosure:localDurationClosure, */fontClosure: localAmountFontClosure))
+                                taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer (/*durationClosure:globalDurationClosure, */fontClosure: globalAmountFontClosure))
 
                                 taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
                                     if ( !evt.isAdjusting) {
@@ -215,17 +191,8 @@ splitPane {
                                     }
                                 })
                             }
-//                            noparent {
-//                                taskTreeTable.columnModel.getColumn(1i).setCellRenderer(
-//                                    cellRenderer {
-//                                        label(foreground: java.awt.Color.BLACK)
-//                                        onRender { children[0].text = value }
-//                                    }
-//                                )
-//                            }
                         }
                     }
-
 //                    def delEditor = new MyEditor(taskTree, delRenderer)
 //                    taskTree.setCellEditor(delEditor)
                 }
@@ -250,19 +217,20 @@ splitPane {
                         selectionModel = new ca.odell.glazedlists.swing.EventSelectionModel(model.swingProxyWorklogList)
                         selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION
                     }
-                    JTable worklogTable = new JTable() {
+                    JXTable worklogTable = new JXTable() {
                         Component prepareRenderer() {
                             super.prepareRenderer ()
                         }
                     }
-                    /*
+
                     worklogTable.setSortable(false);
                     worklogTable.getTableHeader().setDefaultRenderer(new JTableHeader().getDefaultRenderer());
                     worklogTable.setAutoCreateRowSorter(false);
                     worklogTable.setRowSorter(null);
                     worklogTable.columnControlVisible = true
-                    */
-                    table(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
+                    worklogTable.fillsViewportHeight = false //see http://glazedlists.1045722.n5.nabble.com/JXTable-viewport-not-repainted-after-clearing-the-eventList-tp5709890p5709929.html
+
+                    jxtable(worklogTable, id:'worklogTable', selectionModel:selectionModel) {
                         tableFormat = defaultAdvancedTableFormat(columns: [
                                 [name: 'start',     title: 'Start'],
                                 [name: 'amount',     title: 'Duration'],
