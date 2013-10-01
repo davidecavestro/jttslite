@@ -51,7 +51,7 @@ class TaskService {
      * @return the new task id
      */
     @Caching(evict=[
-        @CacheEvict(value="tasks", allEntries=true),
+        @CacheEvict(value="taskById", allEntries=true),
         @CacheEvict(value="workspaceTasks", allEntries=true)
     ])
     public long doInsert(long workspaceId, Long parentId, String title=null, String description=null) {
@@ -92,8 +92,9 @@ class TaskService {
     }
 
     @Caching(evict=[
-    @CacheEvict(value="tasks", allEntries=true),
-    @CacheEvict(value="workspaceTasks", allEntries=true)
+    @CacheEvict(value="taskById", allEntries=true),
+    @CacheEvict(value="workspaceTasks", allEntries=true),
+    @CacheEvict(value="taskPathIds", allEntries=true)
     ])
     public void doUpdate(long id, String title, String description) {
         withSql { String dataSourceName, Sql sql ->
@@ -103,8 +104,9 @@ class TaskService {
     }
 
     @Caching(evict=[
-    @CacheEvict(value="tasks", allEntries=true),
-    @CacheEvict(value="workspaceTasks", allEntries=true)
+    @CacheEvict(value="taskById", allEntries=true),
+    @CacheEvict(value="workspaceTasks", allEntries=true),
+    @CacheEvict(value="taskPathIds", allEntries=true)
     ])
     public void doRename(long id, String title) {
         withSql { String dataSourceName, Sql sql ->
@@ -114,8 +116,9 @@ class TaskService {
     }
 
     @Caching(evict=[
-    @CacheEvict(value="tasks", allEntries=true),
-    @CacheEvict(value="workspaceTasks", allEntries=true)
+    @CacheEvict(value="taskById", allEntries=true),
+    @CacheEvict(value="workspaceTasks", allEntries=true),
+    @CacheEvict(value="taskPathIds", allEntries=true)
     ])
     public void doMove(long id, String parentId, int siblingIndex) {
         def task = getTask (id)
@@ -141,8 +144,12 @@ class TaskService {
     }
 
     @Caching(evict=[
-    @CacheEvict(value="tasks", allEntries=true),
-    @CacheEvict(value="workspaceTasks", allEntries=true)
+    @CacheEvict(value="taskById", allEntries=true),
+    @CacheEvict(value="workspaceTasks", allEntries=true),
+    @CacheEvict(value="taskWorklogs", allEntries=true),
+    @CacheEvict(value="workspaceWorklog", allEntries=true),
+    @CacheEvict(value="worklogById", allEntries=true),
+    @CacheEvict(value="taskPathIds", allEntries=true)
     ])
     public int doDelete(Collection<Long> ids) {
         if (!ids) {
@@ -156,13 +163,30 @@ class TaskService {
     @Cacheable("tasks")
     public TaskBean getTask(Long id) {
         withSql { String dataSourceName, Sql sql ->
-            toBean (sql.firstRow('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.id=?', [id]))
+            toBean (sql.firstRow('SELECT * FROM task t LEFT OUTER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.id=?', [id]))
         }
     }
     @Cacheable("workspaceTasks")
-    List<TaskBean> getTasks(long workspaceId) {
+    public List<TaskBean> getTasks(long workspaceId) {
         withSql { String dataSourceName, Sql sql ->
-            sql.rows('SELECT * FROM task t INNER JOIN task_worklogs tw ON (t.id=tw.id) WHERE t.workspaceId=? AND deleted<>TRUE',[workspaceId]).collect {toBean (it)}
+            def rows = sql.rows("""\
+SELECT
+    t.id AS id,
+    t.workspaceId AS workspaceId,
+    t.treeDepth AS treeDepth,
+    t.treeCode AS treeCode,
+    t.title AS title,
+    t.description AS description,
+    t.parentId AS parentId,
+    t.siblingIndex AS siblingIndex,
+    tw.globalAmount AS globalAmount,
+    tw.localAmount AS localAmount
+FROM task t
+LEFT OUTER JOIN task_worklogs tw
+ON (t.id=tw.id) WHERE t.workspaceId=? AND deleted<>TRUE
+""",
+                    [workspaceId])
+            return rows.collect {toBean (it)}
         }
     }
 
@@ -197,7 +221,7 @@ class TaskService {
         if (props==null) {
             return null
         }
-        return new TaskBean(
+        TaskBean bean = new TaskBean(
             id: props.id,
             workspaceId: props.workspaceId,
             treeDepth: props.treeDepth,
@@ -209,5 +233,6 @@ class TaskService {
             globalAmount: props.globalAmount,
             localAmount: props.localAmount
         )
+        return bean
     }
 }

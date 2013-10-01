@@ -6,6 +6,7 @@
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/css-builder-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/datasource-1.1.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/docking-frame-1.0.0" />
+    <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/eclipse-support-0.7.1" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/fatcowicons-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/glazedlists-1.1.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/gsql-1.1.1" />
@@ -24,7 +25,7 @@
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/swingx-builder-0.7" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/tray-builder-1.0.0" />
     <content url="file://$USER_HOME$/.griffon/1.2.0/projects/jttslite/plugins/validation-1.0.2" />
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="griffon-1.2.0" level="application" />
     <orderEntry type="module-library" exported="">

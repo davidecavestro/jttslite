@@ -29,8 +29,6 @@
 package jttslite
 
 import griffon.swing.SwingApplication
-import groovy.time.TimeCategory
-import groovy.time.TimeDuration
 
 import javax.swing.JFrame
 
@@ -230,12 +228,12 @@ class JttsliteController {
 def whenSpringReadyEnd = {app, applicationContext->
 }*/
 
-    def loadData() {
+    private void loadData() {
         loadLastWorkspace()
         app.event('DataLoad')
     }
 
-    def configureForProduction() {
+    private void configureForProduction() {
         if (!workspaceService.workspacesCount ()) {
             griffon.plugins.splash.SplashScreen.instance.showStatus(app.getMessage ('application.splash.GeneratingDefaultData', "Generating default data"))
             def workspaceId = workspaceService.doInsert ("Default", "Default workspace")
@@ -243,7 +241,7 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
-    def configureForDevelopment() {
+    private void configureForDevelopment() {
         if (!workspaceService.workspacesCount ()) {
             griffon.plugins.splash.SplashScreen.instance.showStatus(app.getMessage ('application.splash.GeneratingDefaultData', "Generating default data"))
             def workspaceId = workspaceService.doInsert ("Default", "Default workspace")
@@ -255,18 +253,18 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
-    def loadTasksForWorkspace(long workspaceId) {
+    private void loadTasksForWorkspace(long workspaceId) {
         loadTasks (taskService.getTasks(workspaceId))
         loadWorkingLog (workspaceId)
     }
 
-    def loadWorkingLog(long workspaceId) {
+    private void loadWorkingLog(long workspaceId) {
         model.workingLogId = worklogService.getWorkingLog (workspaceId)?.id
         startTimer ()
     }
 
     @Threading(Threading.Policy.INSIDE_UITHREAD_SYNC)
-    void loadTasks(Collection<TaskBean> tasks) {
+    private void loadTasks(Collection<TaskBean> tasks) {
         model.taskList.addAll (tasks)
     }
 
@@ -278,7 +276,7 @@ def whenSpringReadyEnd = {app, applicationContext->
      *     Loading a workspace implies loading its data into application UI.
      * </p>
      */
-    public void loadLastWorkspace() {
+    private void loadLastWorkspace() {
         griffon.plugins.splash.SplashScreen.instance.showStatus(app.getMessage ('application.splash.LoadingLastWorkspace', "Loading last workspace used"))
         model.workspaceId = dictionaryService.getLongValue(LAST_WORKSPACE)
         if (model.workspaceId==null || !workspaceService.getWorkspace (model.workspaceId)) {
@@ -293,7 +291,7 @@ def whenSpringReadyEnd = {app, applicationContext->
 
     private final static String LAST_WORKSPACE = 'lastWorkspace'
 
-    def saveLastWorkspace() {
+    private void saveLastWorkspace() {
         dictionaryService.doSaveLong(LAST_WORKSPACE, model.workspaceId)
     }
 
@@ -303,7 +301,7 @@ def whenSpringReadyEnd = {app, applicationContext->
      * @param taskId the task id
      * @param newName the new task name
      */
-    void renameTask (long taskId, String newName) {
+    private void renameTask (long taskId, String newName) {
         taskService.doRename(taskId, newName)
         model.taskMap[taskId].title = newName
     }
@@ -313,7 +311,7 @@ def whenSpringReadyEnd = {app, applicationContext->
      *
      * @param timerTask the task that should be canceled when the worklog is stopped
      */
-    void onWorkingTic(TicTimerTask timerTask) {
+    private void onWorkingTic(TicTimerTask timerTask) {
         if (model.working) {
             def workingLog = model.workingLog
             def amount = onWorkingTic (workingLog)
@@ -331,25 +329,27 @@ def whenSpringReadyEnd = {app, applicationContext->
         }
     }
 
-    Long onWorkingTic(WorklogBean workingLog) {
-        def amount = workingLog.amount!=null?workingLog.amount:System.currentTimeMillis() - workingLog.start.time
+    private Long onWorkingTic(WorklogBean workingLog) {
+        def amount = model.working?System.currentTimeMillis() - workingLog.start.time:workingLog.amount
 
-        model.workingPathIds.each {taskId->
-            def modelTask = model.taskMap[taskId]
-            modelTask.localWorkingAmount = modelTask.localAmount + amount
-            modelTask.globalWorkingAmount = modelTask.globalAmount + amount
+        if (model.workingPathIds) {
+            model.workingPathIds.each {taskId->
+                def modelTask = model.taskMap[taskId]
+                modelTask.localWorkingAmount = modelTask.localAmount + amount
+                modelTask.globalWorkingAmount = modelTask.globalAmount + amount
+            }
         }
 
         return amount
     }
 
     Timer timer
-    def startTimer () {
+    private void startTimer () {
         timer = new Timer()
         updateRunningTicTask = new TicTimerTask()
         timer.schedule (updateRunningTicTask, 0l, 1000l) //tic once per second
     }
-    def stopTimer () {
+    private void stopTimer () {
         updateRunningTicTask?.cancel ()
         timer?.purge()
     }

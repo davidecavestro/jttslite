@@ -31,12 +31,24 @@ class WorkspaceService {
     }
     public WorkspaceBean getWorkspace(Long id) {
         withSql { String dataSourceName, Sql sql ->
-            toBean (sql.firstRow('SELECT * FROM workspace WHERE id=?', [id]))
+            toBean (sql.firstRow("""\
+SELECT
+    id AS id,
+    description AS description,
+    name AS name
+FROM workspace
+WHERE id=?""", [id]))
         }
     }
     public List<WorkspaceBean> getWorkspaces() {
         withSql { String dataSourceName, Sql sql ->
-            sql.rows('SELECT * FROM workspace WHERE deleted=FALSE').collect {toBean (it)}
+            sql.rows("""\
+SELECT
+    id AS id,
+    description AS description,
+    name AS name
+FROM workspace
+WHERE deleted=FALSE""").collect {toBean (it)}
         }
     }
 

@@ -11,10 +11,12 @@
         <property name="caches">
             <set>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="default"/>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="tasks"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="taskById"/>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="taskPathIds"/>
                 <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="workspaceTasks"/>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="worklogs"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="worklogById"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="taskWorklogs"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="workspaceWorklog"/>
             </set>
         </property>
     </bean>
