@@ -30,6 +30,7 @@
 package jttslite
 
 import groovy.beans.Bindable
+import groovy.transform.ToString
 
 /**
  * Represents a <em>workspace table</em> record data.
@@ -37,6 +38,7 @@ import groovy.beans.Bindable
  * @author Davide Cavestro
  */
 @Bindable
+@ToString(includeNames=true,includeFields=true)
 class WorkspaceBean {
     /**
      * The record id

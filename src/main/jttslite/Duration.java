@@ -27,12 +27,15 @@
 
 package jttslite;
 
+import groovy.transform.ToString;
+
 import java.util.Date;
 
 /**
  *
  * @author Davide Cavestro
  */
+@ToString(includeNames=true,includeFields=true)
 public class Duration {
 
     public final static int MILLISECONDS = 0;

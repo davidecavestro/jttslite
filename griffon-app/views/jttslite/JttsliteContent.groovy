@@ -73,16 +73,18 @@ splitPane {
                         jxtable(taskTreeTable, id:'taskTree', selectionModel:selectionModel) {
                             tableFormat = defaultWritableTableFormat(columns: [
                                     [name: 'title', title: 'Name', write: {target, columnNames, index, editedValue->
-                                        //mantain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
+                                        //maintain selection in case of leaf nodes, see http://glazedlists.1045722.n5.nabble.com/TreeList-fires-insert-delete-event-on-update-JTable-selection-lost-td3418617.html
                                         controller.renameTask (target.id, editedValue)
                                     }],
                                     [name: 'localWorkingAmount', title: 'Local amount', read: {target, columnNames, index->
                                         def localWorkingAmount = target.localWorkingAmount
+                                        println "localWorkingAmount is $localWorkingAmount"
                                         //uses working (bound) amount if available, otherwise use persistent data
                                         localWorkingAmount!=null?localWorkingAmount:target.localAmount
                                     }],
                                     [name: 'globalWorkingAmount', title: 'Subtree amount', read: {target, columnNames, index->
                                         def globalWorkingAmount = target.globalWorkingAmount
+                                        println "globalWorkingAmount is $globalWorkingAmount"
                                         globalWorkingAmount!=null?globalWorkingAmount:target.globalAmount
                                     }]],
                             editable: {baseObject, columnNames, index->index==0})
@@ -163,7 +165,16 @@ splitPane {
                                 taskTreeTable.columnModel.getColumn(2i).setCellRenderer(new DurationTableCellRenderer (/*durationClosure:globalDurationClosure, */fontClosure: globalAmountFontClosure))
 
                                 taskTreeTable.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
-                                    if ( !evt.isAdjusting) {
+                                    if ( !evt.valueIsAdjusting) {
+
+                                        int selectionIndex = evt.firstIndex
+                                        int lastIndex = evt.lastIndex
+
+
+                                        def leadSelectionIndex = taskTreeTable.selectionModel.getLeadSelectionIndex()
+                                        def lastSelectionIndex = taskTreeTable.selectionModel.getAnchorSelectionIndex()
+                                        //if (selectionIndex!=null && selectionIndex>=0) {
+                                        def selectedElement = taskTreeTable.model.getElementAt (selectionIndex)
 
                                         EventList selected = taskTreeTable.selectionModel.getSelected()
                                         model.taskSelection = selected
@@ -238,7 +249,7 @@ splitPane {
                         eventTableModel(source:model.swingProxyWorklogList, format:tableFormat)
 
                         current.selectionModel.addListSelectionListener( [valueChanged: {ListSelectionEvent evt ->
-                            if ( !evt.isAdjusting) {
+                            if ( !evt.valueIsAdjusting) {
 
                                 EventList selected = worklogTable.selectionModel.getSelected()
                                 model.worklogSelection = selected

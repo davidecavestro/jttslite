@@ -25,69 +25,30 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+databaseChangeLog() {
 
-package jttslite
+    changeSet(id:'task-worklogs-fix', author: 'davidecavestro') {
+        sql(stripComments: true, splitStatements: true, endDelimiter: ';') {
+            """
 
-import groovy.beans.Bindable
-import groovy.transform.ToString
+DROP VIEW IF EXISTS task_worklogs CASCADE;
+CREATE VIEW task_worklogs AS
+(
+SELECT
+    tk.id,
+    IFNULL (SUM (wl.amount),0) AS localAmount,
+    IFNULL (MIN (
+        SELECT
+            SUM (wl1.amount)
+        FROM
+            worklog wl1 INNER JOIN task tk1 ON (wl1.taskId=tk1.id) WHERE tk1.treeCode LIKE CONCAT (tk.treeCode, '%')),0) AS globalAmount
+FROM
+    worklog wl RIGHT OUTER JOIN task tk ON (wl.taskid=tk.id) WHERE (wl.deleted IS NULL OR wl.deleted<>TRUE) AND tk.deleted<>TRUE
+GROUP BY
+    tk.id
+);
 
-/**
- * Represents a <em>task table</em> record data.
- *
- * @author Davide Cavestro
- */
-@Bindable
-@ToString(includeNames=true,includeFields=true)
-class TaskBean {
-    /**
-     * The record id
-     */
-    Long id
-    /**
-     * The workspace id
-     */
-    Long workspaceId
-    /**
-     * The parent task id
-     */
-    Long parentId
-    /**
-     * The index of this task within its parent's children list
-     */
-    Integer siblingIndex
-    /**
-     * A unique value (within the same workspace) reflecting the task tree depth and sibling index.
-     * <p>
-     * It can be used to easily identify the tasks belonging to a certain subtree.
-     * </p>
-     */
-    String treeCode
-    /**
-     * The task tree level of this task (root is 0, its children are at 1 and so on)
-     */
-    Long treeDepth
-    /**
-     * A title
-     */
-    String title
-    /**
-     * An optional description
-     */
-    String description
-    /**
-     * The sum of direct worklogs amounts
-     */
-    Long localAmount
-    /**
-     * The sum of worklogs amounts for the entire task subtree
-     */
-    Long globalAmount
-    /**
-     * The sum of localAmount plus working log amount
-     */
-    Long localWorkingAmount
-    /**
-     * The sum of globalAmount plus working log amount
-     */
-    Long globalWorkingAmount
+"""
+        }
+    }
 }

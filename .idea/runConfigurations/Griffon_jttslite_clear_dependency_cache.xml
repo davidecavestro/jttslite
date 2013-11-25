@@ -5,6 +5,8 @@
     <setting name="cmdLine" value="clear-dependency-cache" />
     <setting name="depsClasspath" value="true" />
     <setting name="passParentEnv" value="true" />
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>
 </component>

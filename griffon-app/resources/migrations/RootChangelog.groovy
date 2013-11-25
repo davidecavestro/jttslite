@@ -27,5 +27,6 @@
 
 databaseChangeLog() {
     include(file: 'migrations/20130727-initial-schema.groovy', relativeToChangelog: false)
+    include(file: 'migrations/20131104-task_worklogs_fix.groovy', relativeToChangelog: false)
 
 }

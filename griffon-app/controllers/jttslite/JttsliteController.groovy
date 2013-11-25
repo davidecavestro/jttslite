@@ -335,8 +335,13 @@ def whenSpringReadyEnd = {app, applicationContext->
         if (model.workingPathIds) {
             model.workingPathIds.each {taskId->
                 def modelTask = model.taskMap[taskId]
-                modelTask.localWorkingAmount = modelTask.localAmount + amount
-                modelTask.globalWorkingAmount = modelTask.globalAmount + amount
+                if (taskId==workingLog.taskId) {
+                    //updates the local amount only for the running task
+                    modelTask.localWorkingAmount = (modelTask.localAmount?:0) + amount
+                }
+                modelTask.globalWorkingAmount = (modelTask.globalAmount?:0) + amount
+
+                println modelTask
             }
         }
 
@@ -350,8 +355,12 @@ def whenSpringReadyEnd = {app, applicationContext->
         timer.schedule (updateRunningTicTask, 0l, 1000l) //tic once per second
     }
     private void stopTimer () {
+        def workingLog = model.workingLog
+        def modelWorklog = model.worklogMap[workingLog.id]
         updateRunningTicTask?.cancel ()
         timer?.purge()
+        modelWorklog.firePropertyUpdatedEvent ('amount', modelWorklog.amount, modelWorklog.amount)
+
     }
 
     /**

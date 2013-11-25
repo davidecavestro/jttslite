@@ -1,3 +1,9 @@
+griffon.config.locations = [
+        "classpath:${appName}-config.properties",
+        "classpath:${appName}-config.groovy",
+        "file:${userHome}/.griffon/${appName}-config.properties",
+        "file:${userHome}/.griffon/${appName}-config.groovy"].collect{it.toString()}
+
 log4j = {
     // Example of changing the log pattern for the default console
     // appender:

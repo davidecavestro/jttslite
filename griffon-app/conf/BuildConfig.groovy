@@ -169,13 +169,15 @@ griffon.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo 'http://maven.java.net/content/groups/public/'
+
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime' or 'test' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
         //compile 'joda-time:joda-time:2.1'
-        compile 'net.java.dev.glazedlists:glazedlists_java15:1.9.0'
+        compile 'net.java.dev.glazedlists:glazedlists_java16:1.10-SNAPSHOT'
     }
 }
 
