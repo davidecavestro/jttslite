@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - oraclejdk6
+  - oraclejdk7
 env: DISPLAY=:99.0
 env: GRIFFON_OPTS="-XX:MaxPermSize=250m -Xmx768m"
 script: ./griffonw -non-interactive -Dgriffon.artifact.force.upgrade=true test-app;./griffonw -non-interactive -Dgriffon.artifact.force.upgrade=true package
