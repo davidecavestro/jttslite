@@ -4,9 +4,13 @@ JTTSlite image:https://travis-ci.org/davidecavestro/jttslite.png?branch=master["
 JTTS lite is a desktop time tracking application.
 It helps you to trace your daily tasks. It can also generate reports, import and export data.
 
-This project is a complete rewrite of the application using Griffon and an H2 relational database.
-
 The project home is hosted at http://sourceforge.net/projects/jttslite/.
+
+Please note at the moment the project is ON HOLD.
+
+This repo at https://github.com/davidecavestro/jttslite hosts a complete rewrite of the application using Griffon and an H2 relational database.
+
+The production repo is still CVS-backed on SF, exported to github just for convenience at https://github.com/davidecavestro/jttslite-legacy
 
 Credits
 ~~~~~~~
